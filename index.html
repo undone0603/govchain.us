@@ -1,368 +1,1452 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GovChain — Blockchain-Verified Government Procurement</title>
-  <meta name="description" content="GovChain brings blockchain authentication and transparent provenance tracking to government contracting, procurement, and supply chain compliance.">
-  <meta property="og:title" content="GovChain — Blockchain-Verified Government Procurement">
-  <meta property="og:description" content="Tamper-proof product authentication and audit trails for federal, state, and DoD supply chains.">
-  <meta property="og:url" content="https://govchain.us">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>GovChain.us — Government Authentication Protocol</title>
+  <meta name="description" content="Blockchain-verified credentials and document authentication for federal, state, and municipal agencies. Powered by the AuthiChain Protocol." />
+  <meta property="og:title" content="GovChain.us — Government Authentication Protocol" />
+  <meta property="og:description" content="Blockchain-verified credentials and document authentication for government agencies. Protecting citizens. Empowering government." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://govchain.us" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base: { 900:'#0a0f1a', 800:'#0f172a', 700:'#1e293b', 600:'#334155', 500:'#475569' },
+            gov: { red:'#dc2626', redLight:'#ef4444', redDark:'#991b1b', blue:'#2563eb', blueLight:'#3b82f6', blueDark:'#1d4ed8', white:'#f1f5f9', gray:'#94a3b8', grayLight:'#cbd5e1' }
+          },
+          fontFamily: { inter:['Inter','system-ui','sans-serif'] }
+        }
+      }
+    };
+  </script>
   <style>
-    :root, [data-theme="light"] {
-      --color-bg: #f5f5f3; --color-surface: #f9f9f7; --color-surface-2: #ffffff;
-      --color-surface-offset: #ededed; --color-surface-dynamic: #e5e4e0;
-      --color-divider: #d8d7d2; --color-border: #cccbc6;
-      --color-text: #1a1a18; --color-text-muted: #6b6b66; --color-text-faint: #b0b0aa;
-      --color-text-inverse: #f5f5f3;
-      --color-primary: #1a3a6b; --color-primary-hover: #122d57; --color-primary-active: #0c2040;
-      --color-primary-highlight: #d0dae8;
-      --color-gold: #b8860b; --color-gold-hover: #9a6f09; --color-gold-highlight: #f0e6c8;
-      --color-success: #2d6a22; --color-error: #8b1a1a;
-      --shadow-sm: 0 1px 2px oklch(0.18 0.02 250 / 0.06);
-      --shadow-md: 0 4px 12px oklch(0.18 0.02 250 / 0.10);
-      --shadow-lg: 0 12px 32px oklch(0.18 0.02 250 / 0.14);
-      --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
-      --radius-xl: 1rem; --radius-full: 9999px;
-      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
-      --content-wide: 1200px; --content-default: 960px; --content-narrow: 640px;
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Inter', 'Helvetica Neue', sans-serif;
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
-      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
-      --text-3xl: clamp(2.5rem, 1rem + 4vw, 5rem);
-      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
-      --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
-      --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
-      --space-16: 4rem; --space-20: 5rem; --space-24: 6rem; --space-32: 8rem;
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0a0f1a; color: #f1f5f9; overflow-x: hidden; }
+
+    /* Animated gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #ef4444 0%, #f1f5f9 40%, #3b82f6 70%, #ef4444 100%);
+      background-size: 300% 300%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
     }
-    [data-theme="dark"] {
-      --color-bg: #0d1117; --color-surface: #111827; --color-surface-2: #1a2332;
-      --color-surface-offset: #141c28; --color-surface-dynamic: #1e2a3a;
-      --color-divider: #1e2d42; --color-border: #253348;
-      --color-text: #d4d8e0; --color-text-muted: #7a8499; --color-text-faint: #4a5468;
-      --color-text-inverse: #0d1117;
-      --color-primary: #4a7ec9; --color-primary-hover: #3368b5; --color-primary-active: #2352a0;
-      --color-primary-highlight: #1a2b42;
-      --color-gold: #d4a830; --color-gold-hover: #c49020; --color-gold-highlight: #2a2415;
-      --color-success: #5aaa45;
-      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.25);
-      --shadow-md: 0 4px 12px oklch(0 0 0 / 0.4);
-      --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.5);
+    @keyframes gradientShift {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; scroll-padding-top: 5rem; }
-    body { min-height: 100dvh; line-height: 1.6; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background-color: var(--color-bg); transition: background-color 0.3s ease, color 0.3s ease; }
-    img, svg { display: block; max-width: 100%; height: auto; }
-    h1,h2,h3,h4 { text-wrap: balance; line-height: 1.1; }
-    p, li { text-wrap: pretty; max-width: 72ch; }
-    a, button { transition: color var(--transition-interactive), background var(--transition-interactive), border-color var(--transition-interactive), box-shadow var(--transition-interactive); }
-    button { cursor: pointer; background: none; border: none; }
-    ::selection { background: oklch(from var(--color-primary) l c h / 0.2); }
-    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 
-    .nav { position: sticky; top: 0; z-index: 100; background: color-mix(in oklch, var(--color-bg) 85%, transparent); backdrop-filter: blur(16px); border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.06); padding: var(--space-4) 0; }
-    .nav-inner { max-width: var(--content-wide); margin-inline: auto; padding-inline: var(--space-6); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
-    .nav-logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; color: var(--color-text); font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; }
-    .nav-logo svg { flex-shrink: 0; color: var(--color-primary); }
-    .nav-links { display: flex; align-items: center; gap: var(--space-6); list-style: none; }
-    .nav-links a { text-decoration: none; color: var(--color-text-muted); font-size: var(--text-sm); font-weight: 450; }
-    .nav-links a:hover { color: var(--color-text); }
-    .nav-actions { display: flex; align-items: center; gap: var(--space-3); }
-    .btn-primary { padding: var(--space-2) var(--space-5); background: var(--color-primary); color: #fff; border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 600; text-decoration: none; white-space: nowrap; }
-    .btn-primary:hover { background: var(--color-primary-hover); }
-    .theme-toggle { padding: var(--space-2); border-radius: var(--radius-md); color: var(--color-text-muted); }
-    .theme-toggle:hover { background: var(--color-surface-dynamic); color: var(--color-text); }
+    /* Glow buttons */
+    .glow-blue { box-shadow: 0 0 20px rgba(37,99,235,0.4), 0 0 60px rgba(37,99,235,0.15); }
+    .glow-blue:hover { box-shadow: 0 0 30px rgba(37,99,235,0.6), 0 0 80px rgba(37,99,235,0.25); }
+    .glow-red { box-shadow: 0 0 20px rgba(220,38,38,0.4), 0 0 60px rgba(220,38,38,0.15); }
+    .glow-red:hover { box-shadow: 0 0 30px rgba(220,38,38,0.6), 0 0 80px rgba(220,38,38,0.25); }
 
-    .hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; padding: clamp(var(--space-16), 10vw, var(--space-32)) 0; position: relative; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 50% at 60% 40%, color-mix(in oklch, var(--color-primary) 8%, transparent) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 20% 80%, color-mix(in oklch, var(--color-gold) 5%, transparent) 0%, transparent 50%); pointer-events: none; }
-    .hero-inner { max-width: var(--content-wide); margin-inline: auto; padding-inline: var(--space-6); display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); align-items: center; position: relative; z-index: 1; }
-    .hero-badge { display: inline-flex; align-items: center; gap: var(--space-2); background: color-mix(in oklch, var(--color-gold) 12%, var(--color-surface)); border: 1px solid color-mix(in oklch, var(--color-gold) 25%, transparent); color: var(--color-gold); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-6); }
-    .hero-badge-dot { width: 6px; height: 6px; background: var(--color-gold); border-radius: var(--radius-full); animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-    .hero h1 { font-family: var(--font-display); font-size: var(--text-3xl); color: var(--color-text); margin-bottom: var(--space-6); letter-spacing: -0.02em; line-height: 1.05; }
-    .hero h1 em { font-style: italic; color: var(--color-primary); }
-    .hero-sub { font-size: var(--text-lg); color: var(--color-text-muted); margin-bottom: var(--space-10); max-width: 52ch; line-height: 1.5; }
-    .hero-cta { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-    .btn-hero { padding: var(--space-3) var(--space-8); background: var(--color-primary); color: #fff; border-radius: var(--radius-md); font-size: var(--text-base); font-weight: 600; text-decoration: none; box-shadow: var(--shadow-md); }
-    .btn-hero:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-lg); }
-    .btn-outline { padding: var(--space-3) var(--space-8); border: 1px solid var(--color-border); color: var(--color-text); border-radius: var(--radius-md); font-size: var(--text-base); font-weight: 500; text-decoration: none; }
-    .btn-outline:hover { border-color: var(--color-primary); color: var(--color-primary); }
-    .hero-visual { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: var(--space-6); box-shadow: var(--shadow-lg); }
-    .chain-visual { display: flex; flex-direction: column; gap: var(--space-3); }
-    .chain-block { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4); }
-    .chain-block-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
-    .chain-block-id { font-family: 'Courier New', monospace; font-size: var(--text-xs); color: var(--color-text-faint); }
-    .chain-block-status { display: flex; align-items: center; gap: var(--space-1); font-size: var(--text-xs); font-weight: 600; }
-    .status-verified { color: var(--color-success); }
-    .status-dot { width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
-    .chain-block-label { font-size: var(--text-sm); font-weight: 600; color: var(--color-text); margin-bottom: var(--space-1); }
-    .chain-block-hash { font-family: 'Courier New', monospace; font-size: 0.7rem; color: var(--color-text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chain-connector { width: 2px; height: var(--space-3); background: linear-gradient(to bottom, var(--color-primary), var(--color-gold)); margin-left: calc(var(--space-4) + 1px); border-radius: var(--radius-full); }
-
-    .section { padding: clamp(var(--space-16), 8vw, var(--space-24)) 0; }
-    .section-alt { background: var(--color-surface); }
-    .container { max-width: var(--content-wide); margin-inline: auto; padding-inline: var(--space-6); }
-    .section-label { display: inline-block; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-primary); margin-bottom: var(--space-4); }
-    .section-title { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-text); letter-spacing: -0.02em; margin-bottom: var(--space-4); }
-    .section-body { font-size: var(--text-base); color: var(--color-text-muted); max-width: 58ch; margin-bottom: var(--space-12); }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-1); background: var(--color-surface-offset); border-radius: var(--radius-xl); overflow: hidden; margin-top: var(--space-12); }
-    .stat-item { background: var(--color-surface); padding: var(--space-8) var(--space-6); text-align: center; }
-    .stat-value { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 400; color: var(--color-primary); line-height: 1; margin-bottom: var(--space-2); }
-    .stat-label { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
-
-    .use-case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
-    .use-case-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: var(--space-8); box-shadow: var(--shadow-sm); transition: box-shadow var(--transition-interactive), border-color var(--transition-interactive); }
-    .use-case-card:hover { box-shadow: var(--shadow-md); border-color: color-mix(in oklch, var(--color-primary) 30%, var(--color-border)); }
-    .use-case-icon { width: 44px; height: 44px; background: color-mix(in oklch, var(--color-primary) 10%, var(--color-surface)); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); color: var(--color-primary); }
-    .use-case-card h3 { font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-3); color: var(--color-text); letter-spacing: -0.01em; }
-    .use-case-card p { font-size: var(--text-base); color: var(--color-text-muted); line-height: 1.6; }
-    .use-case-card-wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: center; }
-
-    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); position: relative; }
-    .steps-grid::before { content: ''; position: absolute; top: 28px; left: calc(12.5% + 14px); right: calc(12.5% + 14px); height: 2px; background: linear-gradient(to right, var(--color-primary), var(--color-gold), var(--color-primary)); z-index: 0; }
-    .step-item { text-align: center; position: relative; z-index: 1; }
-    .step-num { width: 56px; height: 56px; border-radius: var(--radius-full); background: var(--color-surface-2); border: 2px solid var(--color-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4); font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-primary); font-weight: 600; }
-    .step-item h4 { font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-2); color: var(--color-text); }
-    .step-item p { font-size: var(--text-sm); color: var(--color-text-muted); max-width: 20ch; margin-inline: auto; }
-
-    .compliance-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin-top: var(--space-8); }
-    .compliance-badge { display: flex; align-items: center; gap: var(--space-2); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); font-size: var(--text-xs); font-weight: 600; color: var(--color-text-muted); }
-    .compliance-badge svg { color: var(--color-gold); }
-
-    .cta-banner { background: var(--color-primary); border-radius: var(--radius-xl); padding: clamp(var(--space-10), 6vw, var(--space-16)); text-align: center; position: relative; overflow: hidden; }
-    .cta-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 60%); }
-    .cta-banner h2 { font-family: var(--font-display); font-size: var(--text-2xl); color: #fff; margin-bottom: var(--space-4); position: relative; }
-    .cta-banner p { color: rgba(255,255,255,0.75); font-size: var(--text-base); max-width: 52ch; margin-inline: auto; margin-bottom: var(--space-8); position: relative; }
-    .btn-gold { display: inline-block; padding: var(--space-3) var(--space-10); background: var(--color-gold); color: #000; border-radius: var(--radius-md); font-size: var(--text-base); font-weight: 700; text-decoration: none; position: relative; }
-    .btn-gold:hover { background: var(--color-gold-hover); }
-
-    .footer { border-top: 1px solid var(--color-border); padding: var(--space-12) 0; }
-    .footer-inner { max-width: var(--content-wide); margin-inline: auto; padding-inline: var(--space-6); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-    .footer-logo { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-size: var(--text-base); color: var(--color-text-muted); }
-    .footer-links { display: flex; gap: var(--space-6); }
-    .footer-links a { font-size: var(--text-sm); color: var(--color-text-faint); text-decoration: none; }
-    .footer-links a:hover { color: var(--color-text-muted); }
-    .footer-copy { font-size: var(--text-xs); color: var(--color-text-faint); }
-
-    @media (max-width: 768px) {
-      .hero-inner { grid-template-columns: 1fr; gap: var(--space-10); }
-      .hero-visual { display: none; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .use-case-grid { grid-template-columns: 1fr; }
-      .use-case-card-wide { grid-column: 1 / -1; grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr 1fr; }
-      .steps-grid::before { display: none; }
-      .nav-links { display: none; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
+    /* Pulse animation */
+    @keyframes pulse-glow {
+      0%,100% { opacity:1; }
+      50% { opacity:0.7; }
     }
-    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr 1fr; } .steps-grid { grid-template-columns: 1fr; } }
+    .pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+    /* Card hover */
+    .card-hover { transition: transform 0.35s ease, box-shadow 0.35s ease; }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Glass nav */
+    .glass-nav { background: rgba(15,23,42,0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    /* Grid background */
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Animated particles */
+    .particle {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: float-particle linear infinite;
+    }
+    @keyframes float-particle {
+      0% { transform: translateY(0) scale(1); opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+    }
+
+    /* Counter */
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+
+    /* Gradient border on hover */
+    .gradient-border { position: relative; border: 1px solid #1e293b; transition: border-color 0.3s; }
+    .gradient-border:hover { border-color: transparent; }
+    .gradient-border::before {
+      content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, #dc2626, #2563eb); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .gradient-border:hover::before { opacity: 1; }
+
+    /* Step connector */
+    .step-line { position: relative; }
+    .step-line::after {
+      content: ''; position: absolute; top: 50%; right: -2rem; width: 2rem; height: 2px;
+      background: linear-gradient(90deg, #2563eb, #dc2626); display: none;
+    }
+    @media(min-width:768px) { .step-line::after { display: block; } }
+
+    /* Circular progress */
+    .circle-progress { transform: rotate(-90deg); }
+
+    /* Mobile menu */
+    .mobile-menu-open { overflow: hidden; }
+
+    /* Section padding */
+    .section-pad { padding-top: 5rem; padding-bottom: 5rem; }
+    @media(min-width:768px) { .section-pad { padding-top: 6rem; padding-bottom: 6rem; } }
+
+    /* Map highlight */
+    .state-default { fill: #1e293b; transition: fill 0.3s; }
+    .state-default:hover { fill: #334155; }
+    .state-michigan { fill: #2563eb; filter: drop-shadow(0 0 8px rgba(37,99,235,0.6)); }
+
+    /* Dashboard grid bg */
+    .dash-grid {
+      background-image: radial-gradient(circle, rgba(37,99,235,0.06) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* Pricing popular */
+    .pricing-popular { border: 1px solid #2563eb; box-shadow: 0 0 30px rgba(37,99,235,0.15); }
+
+    /* Phone mockup */
+    .phone-mockup {
+      border: 3px solid #334155; border-radius: 2rem; padding: 0.5rem;
+      background: #0f172a; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+    .phone-notch {
+      width: 40%; height: 6px; background: #334155; border-radius: 3px; margin: 0 auto 0.75rem;
+    }
+
+    /* Fraud alert badges */
+    .badge-critical { background: rgba(220,38,38,0.15); color: #ef4444; border: 1px solid rgba(220,38,38,0.3); }
+    .badge-warning { background: rgba(234,179,8,0.15); color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+    .badge-info { background: rgba(37,99,235,0.15); color: #3b82f6; border: 1px solid rgba(37,99,235,0.3); }
   </style>
 </head>
-<body>
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="#" class="nav-logo" aria-label="GovChain home">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <rect x="2" y="8" width="12" height="8" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          <rect x="18" y="16" width="12" height="8" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
-          <line x1="14" y1="12" x2="18" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<body data-id="0" class="font-inter">
+  <app-icon data-id="1" hidden data-icon="shield" data-palette="Blue"></app-icon>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header data-id="2" id="nav-header-k3x9" class="glass-nav fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div data-id="3" class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 flex items-center justify-between h-16 md:h-18">
+      <!-- Logo -->
+      <a data-id="4" href="#" class="flex items-center gap-2 group">
+        <svg data-id="5" class="w-8 h-8" viewBox="0 0 32 32" fill="none">
+          <path data-id="6" d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16 6.88-1.05 12-8.27 12-16V8L16 2z" fill="url(#shield-grad)" opacity="0.15"/>
+          <path data-id="7" d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16 6.88-1.05 12-8.27 12-16V8L16 2z" stroke="url(#shield-grad)" stroke-width="1.5" fill="none"/>
+          <path data-id="8" d="M12 16l3 3 5-6" stroke="#f1f5f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs data-id="9"><linearGradient data-id="10" id="shield-grad" x1="4" y1="2" x2="28" y2="26"><stop data-id="11" stop-color="#dc2626"/><stop data-id="12" offset="1" stop-color="#2563eb"/></linearGradient></defs>
         </svg>
-        GovChain
+        <span data-id="13" class="text-xl font-bold text-gov-white tracking-tight">Gov<span data-id="14" class="text-gov-white">Chain</span><span data-id="15" class="text-gov-blueLight">.us</span></span>
       </a>
-      <ul class="nav-links">
-        <li><a href="#use-cases">Use Cases</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#compliance">Compliance</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="nav-actions">
-        <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+
+      <!-- Desktop Nav -->
+      <nav data-id="16" id="desktop-nav-p2m7" class="hidden md:flex items-center gap-6 lg:gap-8">
+        <a data-id="17" href="#verification" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Verification</a>
+        <a data-id="18" href="#documents" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Documents</a>
+        <a data-id="19" href="#security" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Security</a>
+        <a data-id="20" href="#agencies" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Agencies</a>
+        <a data-id="21" href="#token" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Token</a>
+        <a data-id="22" href="#contact" class="text-sm text-gov-gray hover:text-gov-white transition-colors">Contact</a>
+      </nav>
+
+      <!-- CTA + Mobile Toggle -->
+      <div data-id="23" class="flex items-center gap-3">
+        <a data-id="24" href="#contact" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-gov-red to-gov-blue text-white text-sm font-semibold glow-red pulse-glow transition-all hover:scale-105">
+          Request Demo
+        </a>
+        <button data-id="25" id="mobile-menu-btn-r4z1" class="md:hidden p-2 text-gov-gray hover:text-gov-white" aria-label="Open menu">
+          <i data-id="26" data-lucide="menu" class="w-6 h-6"></i>
         </button>
-        <a href="#contact" class="btn-primary">Request Demo</a>
       </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <nav data-id="27" id="mobile-menu-w8k2" class="hidden fixed inset-0 z-[60] bg-base-900/98 backdrop-blur-xl flex flex-col p-6">
+    <div data-id="28" class="flex justify-between items-center mb-10">
+      <span data-id="29" class="text-xl font-bold text-gov-white">GovChain<span data-id="30" class="text-gov-blueLight">.us</span></span>
+      <button data-id="31" id="mobile-menu-close-t5n3" class="p-2 text-gov-gray hover:text-gov-white" aria-label="Close menu">
+        <i data-id="32" data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div data-id="33" class="flex flex-col gap-6">
+      <a data-id="34" href="#verification" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Verification</a>
+      <a data-id="35" href="#documents" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Documents</a>
+      <a data-id="36" href="#security" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Security</a>
+      <a data-id="37" href="#agencies" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Agencies</a>
+      <a data-id="38" href="#token" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Token</a>
+      <a data-id="39" href="#contact" class="mobile-nav-link text-lg text-gov-grayLight hover:text-gov-white transition-colors">Contact</a>
+      <a data-id="40" href="#contact" class="mt-4 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-gov-red to-gov-blue text-white font-semibold glow-red">
+        Request Demo
+      </a>
     </div>
   </nav>
 
-  <section class="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <div class="hero-content">
-        <div class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span>Now Accepting Agency Pilots</div>
-        <h1><em>Tamper-Proof</em> Trust for Government Supply Chains</h1>
-        <p class="hero-sub">GovChain delivers blockchain-anchored product authentication and audit trails built for federal, state, and DoD procurement compliance.</p>
-        <div class="hero-cta">
-          <a href="#contact" class="btn-hero">Request Demo</a>
-          <a href="#how-it-works" class="btn-outline">See How It Works</a>
-        </div>
-      </div>
-      <div class="hero-visual" aria-hidden="true">
-        <div class="chain-visual">
-          <div class="chain-block">
-            <div class="chain-block-header"><span class="chain-block-id">Block #4,821,003</span><span class="chain-block-status status-verified"><span class="status-dot"></span>Verified</span></div>
-            <div class="chain-block-label">DoD Procurement — Medical Supplies</div>
-            <div class="chain-block-hash">0x3a7f…d92c → SHA-256: a1b2c3d4e5f6...</div>
-          </div>
-          <div class="chain-connector"></div>
-          <div class="chain-block">
-            <div class="chain-block-header"><span class="chain-block-id">Block #4,821,002</span><span class="chain-block-status status-verified"><span class="status-dot"></span>Verified</span></div>
-            <div class="chain-block-label">GSA Schedule — IT Equipment</div>
-            <div class="chain-block-hash">0x9c2e…11ab → SHA-256: f7e8d9c0b1a2...</div>
-          </div>
-          <div class="chain-connector"></div>
-          <div class="chain-block">
-            <div class="chain-block-header"><span class="chain-block-id">Block #4,821,001</span><span class="chain-block-status status-verified"><span class="status-dot"></span>Verified</span></div>
-            <div class="chain-block-label">State Contract — Pharma Lot #88B</div>
-            <div class="chain-block-hash">0x5d1a…8ef3 → SHA-256: 2a3b4c5d6e7f...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main data-id="41">
+    <!-- ===== HERO ===== -->
+    <section data-id="42" id="hero-v9q4" class="relative min-h-screen flex items-center justify-center hero-grid overflow-hidden">
+      <!-- Particles container -->
+      <div data-id="43" id="particles-container-a1b2" class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true"></div>
+      <!-- Gradient orbs -->
+      <div data-id="44" class="absolute top-1/4 -left-32 w-96 h-96 bg-gov-red/5 rounded-full blur-3xl"></div>
+      <div data-id="45" class="absolute bottom-1/4 -right-32 w-96 h-96 bg-gov-blue/8 rounded-full blur-3xl"></div>
 
-  <section class="section-alt section">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item"><div class="stat-value">100%</div><div class="stat-label">Immutable Audit Trail</div></div>
-        <div class="stat-item"><div class="stat-value">&lt;2s</div><div class="stat-label">Scan-to-Verify Time</div></div>
-        <div class="stat-item"><div class="stat-value">FIPS</div><div class="stat-label">Compliant Encryption</div></div>
-        <div class="stat-item"><div class="stat-value">FAR</div><div class="stat-label">Regulation Aligned</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="use-cases">
-    <div class="container">
-      <span class="section-label">Use Cases</span>
-      <h2 class="section-title">Built for Every Layer of Government</h2>
-      <p class="section-body">From federal defense contracts to state pharmacy boards, GovChain's QR-based verification integrates with your existing workflows — no blockchain expertise required.</p>
-      <div class="use-case-grid">
-        <div class="use-case-card">
-          <div class="use-case-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <h3>DoD &amp; Defense</h3>
-          <p>Counterfeit-resistant component traceability for military hardware, pharmaceuticals, and sensitive supply items. Aligned with DFARS and CMMC requirements.</p>
-        </div>
-        <div class="use-case-card">
-          <div class="use-case-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-          <h3>GSA &amp; Federal Procurement</h3>
-          <p>Vendor authentication and lot-level provenance for GSA Schedule purchases, ensuring product authenticity from manufacturer to agency receiving dock.</p>
-        </div>
-        <div class="use-case-card">
-          <div class="use-case-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-          <h3>State &amp; Local Government</h3>
-          <p>Support for Medicaid drug supply compliance, cannabis regulatory tracking (via StrainChain), and infrastructure equipment verification programs.</p>
-        </div>
-        <div class="use-case-card use-case-card-wide">
-          <div>
-            <div class="use-case-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-            <h3>Pharmaceutical &amp; Biotech</h3>
-            <p>Meet DSCSA and state-level drug traceability mandates with blockchain-anchored chain-of-custody records. Each product scan writes an immutable event to the ledger. GovChain integrates with your existing ERP and inventory systems via REST API.</p>
+      <div data-id="46" class="relative z-10 max-w-5xl mx-auto px-4 md:px-6 text-center pt-24 pb-16">
+        <!-- Shield icon -->
+        <div data-id="47" class="mb-8 flex justify-center">
+          <div data-id="48" class="relative">
+            <svg data-id="49" class="w-20 h-20 md:w-24 md:h-24" viewBox="0 0 96 96" fill="none">
+              <path data-id="50" d="M48 8L12 24v24c0 23.2 15.36 44.85 36 48 20.64-3.15 36-24.8 36-48V24L48 8z" fill="url(#hero-shield)" opacity="0.12"/>
+              <path data-id="51" d="M48 8L12 24v24c0 23.2 15.36 44.85 36 48 20.64-3.15 36-24.8 36-48V24L48 8z" stroke="url(#hero-shield)" stroke-width="2" fill="none"/>
+              <path data-id="52" d="M36 48l9 9 15-18" stroke="#f1f5f9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs data-id="53"><linearGradient data-id="54" id="hero-shield" x1="12" y1="8" x2="84" y2="80"><stop data-id="55" stop-color="#dc2626"/><stop data-id="56" offset="0.5" stop-color="#f1f5f9"/><stop data-id="57" offset="1" stop-color="#2563eb"/></linearGradient></defs>
+            </svg>
+            <div data-id="58" class="absolute inset-0 bg-gov-blue/20 rounded-full blur-2xl animate-pulse"></div>
           </div>
-          <div style="background: var(--color-surface-offset); border-radius: var(--radius-lg); padding: var(--space-6); border: 1px solid var(--color-border);">
-            <div style="font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-faint); margin-bottom: var(--space-3);">Live Verification Record</div>
-            <div style="font-family: 'Courier New', monospace; font-size: var(--text-xs); color: var(--color-text-muted); line-height: 2;">
-              <div style="color: var(--color-success);">&#10003; NDC: 0069-3077-01 &nbsp;Verified</div>
-              <div>LOT: A4B29X &nbsp;EXP: 2027-08</div>
-              <div>Chain events: 7</div>
-              <div>Last scan: 4 min ago</div>
-              <div style="color: var(--color-primary); margin-top: var(--space-2);">Hash: 0x8af2...c391</div>
+        </div>
+
+        <h1 data-id="59" id="hero-headline-m3p8" class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-6">
+          <span data-id="60" class="gradient-text">Government Authentication.</span><br data-id="61"/>
+          <span data-id="62" class="text-gov-white">Reimagined.</span>
+        </h1>
+        <p data-id="63" id="hero-subtitle-n7w2" class="text-base md:text-lg lg:text-xl text-gov-gray max-w-3xl mx-auto mb-10 leading-relaxed font-light">
+          Blockchain-verified credentials and document authentication for federal, state, and municipal agencies. Protecting citizens. Empowering government.
+        </p>
+
+        <div data-id="64" class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <a data-id="65" href="#verification" id="cta-explore-j5k1" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gov-blue text-white font-semibold text-base glow-blue transition-all hover:scale-105 hover:bg-gov-blueDark min-h-[48px]">
+            <i data-id="66" data-lucide="shield-check" class="w-5 h-5"></i> Explore the Protocol
+          </a>
+          <a data-id="67" href="#contact" id="cta-onboard-u2r6" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gov-red text-white font-semibold text-base glow-red transition-all hover:scale-105 hover:bg-gov-redDark min-h-[48px]">
+            <i data-id="68" data-lucide="building-2" class="w-5 h-5"></i> Agency Onboarding
+          </a>
+        </div>
+
+        <!-- Stats bar -->
+        <div data-id="69" id="hero-stats-f4d9" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
+          <div data-id="70" class="bg-base-800/60 border border-base-700/50 rounded-xl p-4 md:p-5">
+            <div data-id="71" class="text-2xl md:text-3xl font-bold text-gov-white tabular-nums">50</div>
+            <div data-id="72" class="text-xs md:text-sm text-gov-gray mt-1">States Ready</div>
+          </div>
+          <div data-id="73" class="bg-base-800/60 border border-base-700/50 rounded-xl p-4 md:p-5">
+            <div data-id="74" class="text-2xl md:text-3xl font-bold text-gov-white tabular-nums"><span data-id="75" class="counter" data-target="12">0</span>M+</div>
+            <div data-id="76" class="text-xs md:text-sm text-gov-gray mt-1">Documents Secured</div>
+          </div>
+          <div data-id="77" class="bg-base-800/60 border border-base-700/50 rounded-xl p-4 md:p-5">
+            <div data-id="78" class="text-2xl md:text-3xl font-bold text-gov-white tabular-nums"><span data-id="79" class="counter" data-target="99.97" data-decimals="2">0</span>%</div>
+            <div data-id="80" class="text-xs md:text-sm text-gov-gray mt-1">Verification Accuracy</div>
+          </div>
+          <div data-id="81" class="bg-base-800/60 border border-base-700/50 rounded-xl p-4 md:p-5">
+            <div data-id="82" class="flex items-center justify-center gap-1 text-green-400">
+              <i data-id="83" data-lucide="check-circle" class="w-5 h-5"></i>
+              <span data-id="84" class="text-lg md:text-xl font-bold">NIST</span>
+            </div>
+            <div data-id="85" class="text-xs md:text-sm text-gov-gray mt-1">Compliant</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div data-id="86" class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <i data-id="87" data-lucide="chevrons-down" class="w-6 h-6 text-gov-gray/50"></i>
+      </div>
+    </section>
+
+    <!-- ===== THE PROBLEM ===== -->
+    <section data-id="88" id="problem-s8g3" class="section-pad bg-base-900 relative">
+      <div data-id="89" class="absolute inset-0 bg-gradient-to-b from-base-800/30 to-transparent"></div>
+      <div data-id="90" class="relative z-10 max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="91" class="text-center mb-14 reveal">
+          <span data-id="92" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-red mb-4">
+            <i data-id="93" data-lucide="alert-triangle" class="w-4 h-4"></i> The Challenge
+          </span>
+          <h2 data-id="94" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">The Crisis of Document Fraud</h2>
+          <p data-id="95" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg leading-relaxed">Paper-based and legacy digital systems are failing. Government agencies face an unprecedented wave of identity fraud and credential manipulation.</p>
+        </div>
+
+        <div data-id="96" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div data-id="97" class="reveal bg-base-800 border border-base-700 rounded-2xl p-8 text-center card-hover">
+            <div data-id="98" class="w-16 h-16 rounded-2xl bg-gov-red/10 flex items-center justify-center mx-auto mb-5">
+              <i data-id="99" data-lucide="dollar-sign" class="w-8 h-8 text-gov-red"></i>
+            </div>
+            <div data-id="100" class="text-4xl md:text-5xl font-black text-gov-redLight tabular-nums mb-2">$<span data-id="101" class="counter" data-target="48.6" data-decimals="1">0</span>B</div>
+            <p data-id="102" class="text-gov-gray text-sm">Annual identity fraud losses in the United States</p>
+          </div>
+          <div data-id="103" class="reveal bg-base-800 border border-base-700 rounded-2xl p-8 text-center card-hover" style="transition-delay:0.1s">
+            <div data-id="104" class="w-16 h-16 rounded-2xl bg-gov-blue/10 flex items-center justify-center mx-auto mb-5">
+              <i data-id="105" data-lucide="file-warning" class="w-8 h-8 text-gov-blueLight"></i>
+            </div>
+            <div data-id="106" class="text-4xl md:text-5xl font-black text-gov-blueLight tabular-nums mb-2"><span data-id="107" class="counter" data-target="2.4" data-decimals="1">0</span>M</div>
+            <p data-id="108" class="text-gov-gray text-sm">Fraudulent credentials detected yearly across agencies</p>
+          </div>
+          <div data-id="109" class="reveal bg-base-800 border border-base-700 rounded-2xl p-8 text-center card-hover" style="transition-delay:0.2s">
+            <div data-id="110" class="w-16 h-16 rounded-2xl bg-gov-red/10 flex items-center justify-center mx-auto mb-5">
+              <i data-id="111" data-lucide="shield-off" class="w-8 h-8 text-gov-red"></i>
+            </div>
+            <div data-id="112" class="text-4xl md:text-5xl font-black text-gov-redLight tabular-nums mb-2"><span data-id="113" class="counter" data-target="73">0</span>%</div>
+            <p data-id="114" class="text-gov-gray text-sm">Of agencies lack real-time document verification capability</p>
+          </div>
+        </div>
+
+        <div data-id="115" class="reveal flex justify-center">
+          <div data-id="116" class="flex items-center gap-4 bg-base-800/60 border border-base-700/50 rounded-xl px-6 py-4 max-w-lg">
+            <div data-id="117" class="flex-shrink-0">
+              <svg data-id="118" class="w-12 h-12" viewBox="0 0 48 48" fill="none">
+                <rect data-id="119" x="8" y="6" width="32" height="36" rx="3" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.5"/>
+                <line data-id="120" x1="14" y1="18" x2="34" y2="18" stroke="#ef4444" stroke-width="1" opacity="0.3"/>
+                <line data-id="121" x1="14" y1="24" x2="30" y2="24" stroke="#ef4444" stroke-width="1" opacity="0.3"/>
+                <path data-id="122" d="M18 36l6-8 6 8" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+                <circle data-id="123" cx="24" cy="24" r="4" stroke="#2563eb" stroke-width="1.5" fill="none"/>
+                <path data-id="124" d="M22 24l1.5 1.5 3-3" stroke="#2563eb" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p data-id="125" class="text-sm text-gov-gray leading-relaxed">Legacy systems are vulnerable to forgery, lack auditability, and cannot keep pace with evolving fraud techniques. <span data-id="126" class="text-gov-white font-medium">GovChain changes that.</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section data-id="127" id="verification" class="section-pad bg-base-800/40 relative">
+      <div data-id="128" class="max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="129" class="text-center mb-14 reveal">
+          <span data-id="130" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-blue mb-4">
+            <i data-id="131" data-lucide="workflow" class="w-4 h-4"></i> The Protocol
+          </span>
+          <h2 data-id="132" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">How GovChain Works</h2>
+          <p data-id="133" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">A 4-step verification pipeline that transforms government document authentication from weeks to seconds.</p>
+        </div>
+
+        <div data-id="134" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Step 1 -->
+          <div data-id="135" class="reveal step-card bg-base-800 border border-base-700 rounded-2xl p-6 card-hover cursor-pointer relative overflow-hidden group" data-step="1">
+            <div data-id="136" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gov-red to-gov-red/50"></div>
+            <div data-id="137" class="flex items-center gap-3 mb-4">
+              <span data-id="138" class="w-10 h-10 rounded-xl bg-gov-red/15 flex items-center justify-center text-gov-redLight font-bold text-lg">1</span>
+              <i data-id="139" data-lucide="upload-cloud" class="w-6 h-6 text-gov-red"></i>
+            </div>
+            <h3 data-id="140" class="text-lg font-bold text-gov-white mb-2">Document Submission</h3>
+            <p data-id="141" class="text-sm text-gov-gray leading-relaxed">Agency uploads document hash to the blockchain via secure API or dashboard interface.</p>
+            <div data-id="142" class="step-details hidden mt-4 pt-4 border-t border-base-700 text-xs text-gov-gray leading-relaxed">
+              Documents never leave agency servers. Only a cryptographic hash — a unique digital fingerprint — is submitted to the chain. This ensures data sovereignty while enabling verification.
+            </div>
+            <button data-id="143" class="step-toggle mt-3 text-xs text-gov-blueLight hover:text-gov-white flex items-center gap-1 transition-colors">
+              <span data-id="144" class="toggle-text">Learn more</span> <i data-id="145" data-lucide="chevron-down" class="w-3 h-3 toggle-icon transition-transform"></i>
+            </button>
+          </div>
+
+          <!-- Step 2 -->
+          <div data-id="146" class="reveal step-card bg-base-800 border border-base-700 rounded-2xl p-6 card-hover cursor-pointer relative overflow-hidden group" data-step="2" style="transition-delay:0.1s">
+            <div data-id="147" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gov-red/50 to-gov-blue/50"></div>
+            <div data-id="148" class="flex items-center gap-3 mb-4">
+              <span data-id="149" class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-400 font-bold text-lg">2</span>
+              <i data-id="150" data-lucide="stamp" class="w-6 h-6 text-purple-400"></i>
+            </div>
+            <h3 data-id="151" class="text-lg font-bold text-gov-white mb-2">Cryptographic Sealing</h3>
+            <p data-id="152" class="text-sm text-gov-gray leading-relaxed">QronCode TruMark applied with tamper-proof cryptographic seal and visual marker.</p>
+            <div data-id="153" class="step-details hidden mt-4 pt-4 border-t border-base-700 text-xs text-gov-gray leading-relaxed">
+              The QronCode TruMark embeds a scannable, machine-readable verification code directly on the document. Any tampering invalidates the seal, providing instant visual and digital authenticity confirmation.
+            </div>
+            <button data-id="154" class="step-toggle mt-3 text-xs text-gov-blueLight hover:text-gov-white flex items-center gap-1 transition-colors">
+              <span data-id="155" class="toggle-text">Learn more</span> <i data-id="156" data-lucide="chevron-down" class="w-3 h-3 toggle-icon transition-transform"></i>
+            </button>
+          </div>
+
+          <!-- Step 3 -->
+          <div data-id="157" class="reveal step-card bg-base-800 border border-base-700 rounded-2xl p-6 card-hover cursor-pointer relative overflow-hidden group" data-step="3" style="transition-delay:0.2s">
+            <div data-id="158" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gov-blue/50 to-gov-blue"></div>
+            <div data-id="159" class="flex items-center gap-3 mb-4">
+              <span data-id="160" class="w-10 h-10 rounded-xl bg-gov-blue/15 flex items-center justify-center text-gov-blueLight font-bold text-lg">3</span>
+              <i data-id="161" data-lucide="link" class="w-6 h-6 text-gov-blueLight"></i>
+            </div>
+            <h3 data-id="162" class="text-lg font-bold text-gov-white mb-2">Chain Verification</h3>
+            <p data-id="163" class="text-sm text-gov-gray leading-relaxed">Polygon blockchain records immutable proof with timestamp and issuing authority metadata.</p>
+            <div data-id="164" class="step-details hidden mt-4 pt-4 border-t border-base-700 text-xs text-gov-gray leading-relaxed">
+              Every verification record is permanently stored on the Polygon blockchain — a high-speed, low-cost, environmentally sustainable L2 network. Records cannot be altered, deleted, or disputed.
+            </div>
+            <button data-id="165" class="step-toggle mt-3 text-xs text-gov-blueLight hover:text-gov-white flex items-center gap-1 transition-colors">
+              <span data-id="166" class="toggle-text">Learn more</span> <i data-id="167" data-lucide="chevron-down" class="w-3 h-3 toggle-icon transition-transform"></i>
+            </button>
+          </div>
+
+          <!-- Step 4 -->
+          <div data-id="168" class="reveal step-card bg-base-800 border border-base-700 rounded-2xl p-6 card-hover cursor-pointer relative overflow-hidden group" data-step="4" style="transition-delay:0.3s">
+            <div data-id="169" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gov-blue to-green-500"></div>
+            <div data-id="170" class="flex items-center gap-3 mb-4">
+              <span data-id="171" class="w-10 h-10 rounded-xl bg-green-500/15 flex items-center justify-center text-green-400 font-bold text-lg">4</span>
+              <i data-id="172" data-lucide="check-circle" class="w-6 h-6 text-green-400"></i>
+            </div>
+            <h3 data-id="173" class="text-lg font-bold text-gov-white mb-2">Instant Authentication</h3>
+            <p data-id="174" class="text-sm text-gov-gray leading-relaxed">Any party can verify document authenticity in under 2 seconds via scan or lookup.</p>
+            <div data-id="175" class="step-details hidden mt-4 pt-4 border-t border-base-700 text-xs text-gov-gray leading-relaxed">
+              Citizens, employers, courts, and other agencies can verify any GovChain-sealed document instantly. No phone calls, no waiting, no manual review — just cryptographic truth.
+            </div>
+            <button data-id="176" class="step-toggle mt-3 text-xs text-gov-blueLight hover:text-gov-white flex items-center gap-1 transition-colors">
+              <span data-id="177" class="toggle-text">Learn more</span> <i data-id="178" data-lucide="chevron-down" class="w-3 h-3 toggle-icon transition-transform"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DOCUMENT TYPES ===== -->
+    <section data-id="179" id="documents" class="section-pad bg-base-900">
+      <div data-id="180" class="max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="181" class="text-center mb-14 reveal">
+          <span data-id="182" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-blueLight mb-4">
+            <i data-id="183" data-lucide="files" class="w-4 h-4"></i> Coverage
+          </span>
+          <h2 data-id="184" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Document Types Supported</h2>
+          <p data-id="185" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">From vital records to professional credentials, GovChain authenticates the documents that matter most.</p>
+        </div>
+
+        <div data-id="186" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div data-id="187" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover">
+            <div data-id="188" class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-4">
+              <i data-id="189" data-lucide="baby" class="w-6 h-6 text-pink-400"></i>
+            </div>
+            <h3 data-id="190" class="font-bold text-gov-white mb-2">Birth Certificates</h3>
+            <p data-id="191" class="text-sm text-gov-gray leading-relaxed mb-3">Vital records authentication with hospital and registrar chain-of-custody verification.</p>
+            <span data-id="192" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="193" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.05s">
+            <div data-id="194" class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+              <i data-id="195" data-lucide="award" class="w-6 h-6 text-amber-400"></i>
+            </div>
+            <h3 data-id="196" class="font-bold text-gov-white mb-2">Professional Licenses</h3>
+            <p data-id="197" class="text-sm text-gov-gray leading-relaxed mb-3">Real-time license status verification for healthcare, legal, engineering, and trade professionals.</p>
+            <span data-id="198" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="199" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.1s">
+            <div data-id="200" class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-4">
+              <i data-id="201" data-lucide="graduation-cap" class="w-6 h-6 text-indigo-400"></i>
+            </div>
+            <h3 data-id="202" class="font-bold text-gov-white mb-2">Academic Diplomas</h3>
+            <p data-id="203" class="text-sm text-gov-gray leading-relaxed mb-3">University and college credential verification with degree conferral blockchain records.</p>
+            <span data-id="204" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="205" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.15s">
+            <div data-id="206" class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4">
+              <i data-id="207" data-lucide="car" class="w-6 h-6 text-cyan-400"></i>
+            </div>
+            <h3 data-id="208" class="font-bold text-gov-white mb-2">Driver's Licenses</h3>
+            <p data-id="209" class="text-sm text-gov-gray leading-relaxed mb-3">Secretary of State integration for instant license status and identity confirmation.</p>
+            <span data-id="210" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="211" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.2s">
+            <div data-id="212" class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-4">
+              <i data-id="213" data-lucide="house" class="w-6 h-6 text-emerald-400"></i>
+            </div>
+            <h3 data-id="214" class="font-bold text-gov-white mb-2">Property Deeds</h3>
+            <p data-id="215" class="text-sm text-gov-gray leading-relaxed mb-3">County register of deeds integration with full chain-of-title blockchain history.</p>
+            <span data-id="216" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="217" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.25s">
+            <div data-id="218" class="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center mb-4">
+              <i data-id="219" data-lucide="gavel" class="w-6 h-6 text-red-400"></i>
+            </div>
+            <h3 data-id="220" class="font-bold text-gov-white mb-2">Court Orders</h3>
+            <p data-id="221" class="text-sm text-gov-gray leading-relaxed mb-3">Judicial system verification with tamper-proof court seal authentication and case tracking.</p>
+            <span data-id="222" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="223" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.3s">
+            <div data-id="224" class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+              <i data-id="225" data-lucide="vote" class="w-6 h-6 text-blue-400"></i>
+            </div>
+            <h3 data-id="226" class="font-bold text-gov-white mb-2">Voter Registration</h3>
+            <p data-id="227" class="text-sm text-gov-gray leading-relaxed mb-3">Election integrity through cryptographically verified voter rolls and registration records.</p>
+            <span data-id="228" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+
+          <div data-id="229" class="reveal gradient-border bg-base-800 rounded-2xl p-6 card-hover" style="transition-delay:0.35s">
+            <div data-id="230" class="w-12 h-12 rounded-xl bg-gov-blue/10 flex items-center justify-center mb-4">
+              <i data-id="231" data-lucide="id-card" class="w-6 h-6 text-gov-blueLight"></i>
+            </div>
+            <h3 data-id="232" class="font-bold text-gov-white mb-2">Government IDs</h3>
+            <p data-id="233" class="text-sm text-gov-gray leading-relaxed mb-3">Federal, state, and municipal identification cards with biometric hash anchoring.</p>
+            <span data-id="234" class="text-xs text-gov-blueLight font-medium cursor-pointer hover:text-gov-white transition-colors">Learn More →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== AGENCY COMMAND CENTER ===== -->
+    <section data-id="235" id="agencies" class="section-pad bg-base-800/40 relative">
+      <div data-id="236" class="max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="237" class="text-center mb-14 reveal">
+          <span data-id="238" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-blueLight mb-4">
+            <i data-id="239" data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+          </span>
+          <h2 data-id="240" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Real-Time Oversight for Every Agency</h2>
+          <p data-id="241" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">A unified command center for document verification, fraud monitoring, and compliance tracking.</p>
+        </div>
+
+        <div data-id="242" class="reveal bg-base-800 border border-base-700 rounded-2xl overflow-hidden dash-grid">
+          <!-- Dashboard Header -->
+          <div data-id="243" class="border-b border-base-700 px-6 py-4 flex items-center justify-between">
+            <div data-id="244" class="flex items-center gap-3">
+              <div data-id="245" class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div data-id="246" class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div data-id="247" class="w-3 h-3 rounded-full bg-green-500"></div>
+              <span data-id="248" class="ml-3 text-sm text-gov-gray font-medium">GovChain Agency Dashboard — Michigan SOS</span>
+            </div>
+            <div data-id="249" class="hidden md:flex items-center gap-2 text-xs text-gov-gray">
+              <i data-id="250" data-lucide="radio" class="w-3 h-3 text-green-400"></i> Live
+            </div>
+          </div>
+
+          <!-- Dashboard Content -->
+          <div data-id="251" class="p-5 md:p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <!-- Stat Cards -->
+            <div data-id="252" class="bg-base-900/60 border border-base-700/50 rounded-xl p-5">
+              <div data-id="253" class="flex items-center justify-between mb-3">
+                <span data-id="254" class="text-xs text-gov-gray uppercase tracking-wider">Today's Verifications</span>
+                <i data-id="255" data-lucide="trending-up" class="w-4 h-4 text-green-400"></i>
+              </div>
+              <div data-id="256" class="text-3xl font-bold text-gov-white tabular-nums"><span data-id="257" class="counter" data-target="14832">0</span></div>
+              <div data-id="258" class="text-xs text-green-400 mt-1">↑ 12.4% from yesterday</div>
+            </div>
+
+            <div data-id="259" class="bg-base-900/60 border border-base-700/50 rounded-xl p-5">
+              <div data-id="260" class="flex items-center justify-between mb-3">
+                <span data-id="261" class="text-xs text-gov-gray uppercase tracking-wider">Active Sessions</span>
+                <i data-id="262" data-lucide="users" class="w-4 h-4 text-gov-blueLight"></i>
+              </div>
+              <div data-id="263" class="text-3xl font-bold text-gov-white tabular-nums"><span data-id="264" class="counter" data-target="247">0</span></div>
+              <div data-id="265" class="text-xs text-gov-gray mt-1">Across 18 departments</div>
+            </div>
+
+            <div data-id="266" class="bg-base-900/60 border border-base-700/50 rounded-xl p-5">
+              <div data-id="267" class="flex items-center justify-between mb-3">
+                <span data-id="268" class="text-xs text-gov-gray uppercase tracking-wider">Fraud Blocked</span>
+                <i data-id="269" data-lucide="shield-alert" class="w-4 h-4 text-gov-red"></i>
+              </div>
+              <div data-id="270" class="text-3xl font-bold text-gov-redLight tabular-nums"><span data-id="271" class="counter" data-target="23">0</span></div>
+              <div data-id="272" class="text-xs text-gov-red mt-1">3 critical alerts</div>
+            </div>
+
+            <div data-id="273" class="bg-base-900/60 border border-base-700/50 rounded-xl p-5">
+              <div data-id="274" class="flex items-center justify-between mb-3">
+                <span data-id="275" class="text-xs text-gov-gray uppercase tracking-wider">Compliance Score</span>
+                <i data-id="276" data-lucide="gauge" class="w-4 h-4 text-green-400"></i>
+              </div>
+              <div data-id="277" class="flex items-center gap-3">
+                <svg data-id="278" class="w-14 h-14 circle-progress" viewBox="0 0 56 56">
+                  <circle data-id="279" cx="28" cy="28" r="24" stroke="#1e293b" stroke-width="4" fill="none"/>
+                  <circle data-id="280" cx="28" cy="28" r="24" stroke="#22c55e" stroke-width="4" fill="none" stroke-dasharray="150.8" stroke-dashoffset="2" stroke-linecap="round"/>
+                </svg>
+                <span data-id="281" class="text-2xl font-bold text-green-400 tabular-nums">98.7%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fraud Alerts -->
+          <div data-id="282" class="px-5 md:px-6 pb-5 md:pb-6">
+            <div data-id="283" class="bg-base-900/60 border border-base-700/50 rounded-xl p-5">
+              <div data-id="284" class="flex items-center justify-between mb-4">
+                <h4 data-id="285" class="text-sm font-semibold text-gov-white flex items-center gap-2">
+                  <i data-id="286" data-lucide="bell-ring" class="w-4 h-4 text-gov-red"></i> Recent Fraud Alerts
+                </h4>
+                <span data-id="287" class="text-xs text-gov-gray">Last 24h</span>
+              </div>
+              <div data-id="288" class="space-y-3">
+                <div data-id="289" class="flex items-center justify-between p-3 bg-base-800/60 rounded-lg">
+                  <div data-id="290" class="flex items-center gap-3">
+                    <span data-id="291" class="badge-critical text-xs font-semibold px-2 py-1 rounded-md">CRITICAL</span>
+                    <span data-id="292" class="text-sm text-gov-grayLight">Duplicate birth certificate hash — Wayne County</span>
+                  </div>
+                  <span data-id="293" class="text-xs text-gov-gray hidden md:block">2h ago</span>
+                </div>
+                <div data-id="294" class="flex items-center justify-between p-3 bg-base-800/60 rounded-lg">
+                  <div data-id="295" class="flex items-center gap-3">
+                    <span data-id="296" class="badge-warning text-xs font-semibold px-2 py-1 rounded-md">WARNING</span>
+                    <span data-id="297" class="text-sm text-gov-grayLight">Anomalous verification volume — Kent County</span>
+                  </div>
+                  <span data-id="298" class="text-xs text-gov-gray hidden md:block">5h ago</span>
+                </div>
+                <div data-id="299" class="flex items-center justify-between p-3 bg-base-800/60 rounded-lg">
+                  <div data-id="300" class="flex items-center gap-3">
+                    <span data-id="301" class="badge-info text-xs font-semibold px-2 py-1 rounded-md">INFO</span>
+                    <span data-id="302" class="text-sm text-gov-grayLight">New agency connected — Washtenaw County Clerk</span>
+                  </div>
+                  <span data-id="303" class="text-xs text-gov-gray hidden md:block">12h ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div data-id="304" class="border-t border-base-700 px-6 py-4 flex justify-center">
+            <a data-id="305" href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gov-blue text-white font-semibold text-sm glow-blue hover:scale-105 transition-all">
+              <i data-id="306" data-lucide="lock" class="w-4 h-4"></i> Request Dashboard Access
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CITIZEN VERIFICATION ===== -->
+    <section data-id="307" id="citizen-verify-q3m8" class="section-pad bg-base-900 relative overflow-hidden">
+      <div data-id="308" class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gov-blue/3 to-transparent"></div>
+      <div data-id="309" class="relative z-10 max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="310" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div data-id="311" class="reveal">
+            <span data-id="312" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-blueLight mb-4">
+              <i data-id="313" data-lucide="smartphone" class="w-4 h-4"></i> For Citizens
+            </span>
+            <h2 data-id="314" class="text-3xl md:text-4xl font-bold text-gov-white mb-5">Verify Any Government Document in Seconds</h2>
+            <p data-id="315" class="text-gov-gray text-base md:text-lg leading-relaxed mb-8">No app download required. Simply scan the QronCode on any GovChain-sealed document with your phone camera and get instant cryptographic verification.</p>
+
+            <div data-id="316" class="space-y-4 mb-8">
+              <div data-id="317" class="flex items-start gap-4">
+                <div data-id="318" class="w-10 h-10 rounded-xl bg-gov-blue/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i data-id="319" data-lucide="scan-line" class="w-5 h-5 text-gov-blueLight"></i>
+                </div>
+                <div data-id="320">
+                  <h4 data-id="321" class="font-semibold text-gov-white mb-1">Scan QronCode</h4>
+                  <p data-id="322" class="text-sm text-gov-gray">Point your camera at the QronCode TruMark on the document</p>
+                </div>
+              </div>
+              <div data-id="323" class="flex items-start gap-4">
+                <div data-id="324" class="w-10 h-10 rounded-xl bg-green-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i data-id="325" data-lucide="circle-check" class="w-5 h-5 text-green-400"></i>
+                </div>
+                <div data-id="326">
+                  <h4 data-id="327" class="font-semibold text-gov-white mb-1">Instant Result</h4>
+                  <p data-id="328" class="text-sm text-gov-gray">See verification status with green checkmark and document metadata</p>
+                </div>
+              </div>
+              <div data-id="329" class="flex items-start gap-4">
+                <div data-id="330" class="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i data-id="331" data-lucide="share-2" class="w-5 h-5 text-purple-400"></i>
+                </div>
+                <div data-id="332">
+                  <h4 data-id="333" class="font-semibold text-gov-white mb-1">Share Proof</h4>
+                  <p data-id="334" class="text-sm text-gov-gray">Generate a shareable verification proof link for employers or institutions</p>
+                </div>
+              </div>
+            </div>
+
+            <a data-id="335" href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gov-blue text-white font-semibold text-sm glow-blue hover:scale-105 transition-all min-h-[44px]">
+              <i data-id="336" data-lucide="scan" class="w-4 h-4"></i> Try Citizen Verification
+            </a>
+          </div>
+
+          <!-- Phone Mockup -->
+          <div data-id="337" class="reveal flex justify-center" style="transition-delay:0.15s">
+            <div data-id="338" class="phone-mockup w-[280px] md:w-[300px]">
+              <div data-id="339" class="phone-notch"></div>
+              <div data-id="340" class="bg-base-900 rounded-2xl p-4 space-y-4">
+                <!-- Status bar -->
+                <div data-id="341" class="flex items-center justify-between text-xs text-gov-gray px-1">
+                  <span data-id="342">GovChain.us</span>
+                  <div data-id="343" class="flex items-center gap-1"><i data-id="344" data-lucide="wifi" class="w-3 h-3"></i><i data-id="345" data-lucide="battery-full" class="w-3 h-3"></i></div>
+                </div>
+                <!-- Scan area -->
+                <div data-id="346" class="border-2 border-dashed border-gov-blue/40 rounded-xl p-8 flex flex-col items-center justify-center">
+                  <i data-id="347" data-lucide="scan" class="w-12 h-12 text-gov-blueLight mb-2"></i>
+                  <span data-id="348" class="text-xs text-gov-gray">Scanning...</span>
+                </div>
+                <!-- Result -->
+                <div data-id="349" class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                  <div data-id="350" class="flex items-center gap-2 mb-3">
+                    <i data-id="351" data-lucide="circle-check-big" class="w-6 h-6 text-green-400"></i>
+                    <span data-id="352" class="font-bold text-green-400 text-sm">VERIFIED</span>
+                  </div>
+                  <div data-id="353" class="space-y-2 text-xs">
+                    <div data-id="354" class="flex justify-between"><span data-id="355" class="text-gov-gray">Document</span><span data-id="356" class="text-gov-white">Driver's License</span></div>
+                    <div data-id="357" class="flex justify-between"><span data-id="358" class="text-gov-gray">Issuer</span><span data-id="359" class="text-gov-white">MI SOS</span></div>
+                    <div data-id="360" class="flex justify-between"><span data-id="361" class="text-gov-gray">Issued</span><span data-id="362" class="text-gov-white">2025-11-14</span></div>
+                    <div data-id="363" class="flex justify-between"><span data-id="364" class="text-gov-gray">Status</span><span data-id="365" class="text-green-400 font-semibold">Active</span></div>
+                  </div>
+                </div>
+                <!-- Share button -->
+                <button data-id="366" class="w-full bg-gov-blue/20 border border-gov-blue/30 rounded-xl py-2.5 text-xs text-gov-blueLight font-semibold flex items-center justify-center gap-2 cursor-default">
+                  <i data-id="367" data-lucide="share-2" class="w-3 h-3"></i> Share Verification Proof
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section section-alt" id="how-it-works">
-    <div class="container">
-      <span class="section-label">How It Works</span>
-      <h2 class="section-title">Verification in Four Steps</h2>
-      <p class="section-body">GovChain wraps your existing QR code and inventory workflows with cryptographic proof — without disrupting your operations.</p>
-      <div class="steps-grid">
-        <div class="step-item"><div class="step-num">1</div><h4>Register Product</h4><p>Assign a unique GovChain identity to each item at the point of manufacture or contract award.</p></div>
-        <div class="step-item"><div class="step-num">2</div><h4>Anchor to Chain</h4><p>Product metadata and custody events are hashed and written to an immutable blockchain ledger.</p></div>
-        <div class="step-item"><div class="step-num">3</div><h4>Scan QR Code</h4><p>Anyone in the supply chain scans the product's QR code with any smartphone camera.</p></div>
-        <div class="step-item"><div class="step-num">4</div><h4>Instant Proof</h4><p>Live verification result with full audit trail available to inspectors, auditors, and contracting officers in under 2 seconds.</p></div>
-      </div>
-    </div>
-  </section>
+    <!-- ===== SECURITY & COMPLIANCE ===== -->
+    <section data-id="368" id="security" class="section-pad bg-base-800/40">
+      <div data-id="369" class="max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="370" class="text-center mb-14 reveal">
+          <span data-id="371" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-red mb-4">
+            <i data-id="372" data-lucide="shield-check" class="w-4 h-4"></i> Security
+          </span>
+          <h2 data-id="373" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Federal-Grade Security Infrastructure</h2>
+          <p data-id="374" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">Built to exceed the most rigorous federal security standards and compliance requirements.</p>
+        </div>
 
-  <section class="section" id="compliance">
-    <div class="container">
-      <span class="section-label">Compliance &amp; Standards</span>
-      <h2 class="section-title">Aligned With Federal Requirements</h2>
-      <p class="section-body">GovChain is architected from the ground up to meet the regulatory and security standards that government agencies demand.</p>
-      <div class="compliance-bar">
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>FIPS 140-2 Encryption</div>
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>FAR / DFARS Aligned</div>
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>CMMC Level 2 Ready</div>
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>DSCSA Drug Traceability</div>
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>FedRAMP-Ready Architecture</div>
-        <div class="compliance-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>SBIR / DoD 26.1 Eligible</div>
-      </div>
-    </div>
-  </section>
+        <!-- Compliance Badges -->
+        <div data-id="375" class="reveal grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <div data-id="376" class="bg-base-800 border border-base-700 rounded-2xl p-5 text-center card-hover">
+            <div data-id="377" class="w-14 h-14 rounded-full bg-gov-blue/10 flex items-center justify-center mx-auto mb-3">
+              <i data-id="378" data-lucide="shield" class="w-7 h-7 text-gov-blueLight"></i>
+            </div>
+            <div data-id="379" class="text-sm font-bold text-gov-white">NIST 800-53</div>
+            <div data-id="380" class="text-xs text-gov-gray mt-1">Compliant</div>
+          </div>
+          <div data-id="381" class="bg-base-800 border border-base-700 rounded-2xl p-5 text-center card-hover">
+            <div data-id="382" class="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-3">
+              <i data-id="383" data-lucide="cloud" class="w-7 h-7 text-green-400"></i>
+            </div>
+            <div data-id="384" class="text-sm font-bold text-gov-white">FedRAMP</div>
+            <div data-id="385" class="text-xs text-gov-gray mt-1">Ready</div>
+          </div>
+          <div data-id="386" class="bg-base-800 border border-base-700 rounded-2xl p-5 text-center card-hover">
+            <div data-id="387" class="w-14 h-14 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-3">
+              <i data-id="388" data-lucide="file-check" class="w-7 h-7 text-purple-400"></i>
+            </div>
+            <div data-id="389" class="text-sm font-bold text-gov-white">SOC 2 Type II</div>
+            <div data-id="390" class="text-xs text-gov-gray mt-1">Certified</div>
+          </div>
+          <div data-id="391" class="bg-base-800 border border-base-700 rounded-2xl p-5 text-center card-hover">
+            <div data-id="392" class="w-14 h-14 rounded-full bg-gov-red/10 flex items-center justify-center mx-auto mb-3">
+              <i data-id="393" data-lucide="lock" class="w-7 h-7 text-gov-redLight"></i>
+            </div>
+            <div data-id="394" class="text-sm font-bold text-gov-white">CJIS Policy</div>
+            <div data-id="395" class="text-xs text-gov-gray mt-1">Aligned</div>
+          </div>
+        </div>
 
-  <section class="section" id="contact">
-    <div class="container">
-      <div class="cta-banner">
-        <h2>Ready to Secure Your Supply Chain?</h2>
-        <p>Request a live demo with your agency's procurement team. GovChain pilots are free for qualifying government entities and contractors.</p>
-        <a href="mailto:demo@govchain.us" class="btn-gold">Request a Demo →</a>
+        <!-- Security Features Grid -->
+        <div data-id="396" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div data-id="397" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover">
+            <div data-id="398" class="flex items-center gap-3 mb-3">
+              <div data-id="399" class="w-10 h-10 rounded-xl bg-gov-blue/10 flex items-center justify-center"><i data-id="400" data-lucide="eye-off" class="w-5 h-5 text-gov-blueLight"></i></div>
+              <h3 data-id="401" class="font-bold text-gov-white">Zero-Knowledge Proofs</h3>
+            </div>
+            <p data-id="402" class="text-sm text-gov-gray leading-relaxed">Verify document authenticity without revealing underlying personal data. Privacy by cryptographic design.</p>
+          </div>
+          <div data-id="403" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.05s">
+            <div data-id="404" class="flex items-center gap-3 mb-3">
+              <div data-id="405" class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center"><i data-id="406" data-lucide="lock-keyhole" class="w-5 h-5 text-green-400"></i></div>
+              <h3 data-id="407" class="font-bold text-gov-white">AES-256 Encryption</h3>
+            </div>
+            <p data-id="408" class="text-sm text-gov-gray leading-relaxed">End-to-end encryption for all data in transit and at rest. The same standard used by the Department of Defense.</p>
+          </div>
+          <div data-id="409" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.1s">
+            <div data-id="410" class="flex items-center gap-3 mb-3">
+              <div data-id="411" class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center"><i data-id="412" data-lucide="fingerprint" class="w-5 h-5 text-amber-400"></i></div>
+              <h3 data-id="413" class="font-bold text-gov-white">Multi-Factor Auth</h3>
+            </div>
+            <p data-id="414" class="text-sm text-gov-gray leading-relaxed">Biometric, hardware token, and credential-based authentication layers for agency access control.</p>
+          </div>
+          <div data-id="415" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.15s">
+            <div data-id="416" class="flex items-center gap-3 mb-3">
+              <div data-id="417" class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center"><i data-id="418" data-lucide="scroll-text" class="w-5 h-5 text-cyan-400"></i></div>
+              <h3 data-id="419" class="font-bold text-gov-white">Immutable Audit Trail</h3>
+            </div>
+            <p data-id="420" class="text-sm text-gov-gray leading-relaxed">Every action logged on-chain. Permanent, tamper-proof records for compliance audits and FOIA requests.</p>
+          </div>
+          <div data-id="421" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.2s">
+            <div data-id="422" class="flex items-center gap-3 mb-3">
+              <div data-id="423" class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center"><i data-id="424" data-lucide="users" class="w-5 h-5 text-purple-400"></i></div>
+              <h3 data-id="425" class="font-bold text-gov-white">Role-Based Access</h3>
+            </div>
+            <p data-id="426" class="text-sm text-gov-gray leading-relaxed">Granular permission controls with department-level isolation and hierarchical approval workflows.</p>
+          </div>
+          <div data-id="427" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.25s">
+            <div data-id="428" class="flex items-center gap-3 mb-3">
+              <div data-id="429" class="w-10 h-10 rounded-xl bg-gov-red/10 flex items-center justify-center"><i data-id="430" data-lucide="key-round" class="w-5 h-5 text-gov-redLight"></i></div>
+              <h3 data-id="431" class="font-bold text-gov-white">Air-Gapped Key Mgmt</h3>
+            </div>
+            <p data-id="432" class="text-sm text-gov-gray leading-relaxed">Master signing keys stored in air-gapped HSMs. Physical separation ensures compromise resistance.</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo">
-        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="8" width="12" height="8" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/><rect x="18" y="16" width="12" height="8" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/><line x1="14" y1="12" x2="18" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        GovChain.us
+    <!-- ===== STATE PILOT — MICHIGAN ===== -->
+    <section data-id="433" id="pilot-mi-e7f2" class="section-pad bg-base-900 relative overflow-hidden">
+      <div data-id="434" class="absolute top-0 left-0 w-full h-full">
+        <div data-id="435" class="absolute top-1/3 left-1/4 w-64 h-64 bg-gov-blue/4 rounded-full blur-3xl"></div>
+        <div data-id="436" class="absolute bottom-1/3 right-1/4 w-64 h-64 bg-gov-red/4 rounded-full blur-3xl"></div>
       </div>
-      <nav class="footer-links" aria-label="Footer navigation">
-        <a href="#use-cases">Use Cases</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#compliance">Compliance</a>
-        <a href="mailto:demo@govchain.us">Contact</a>
-      </nav>
-      <p class="footer-copy">&copy; 2026 GovChain. Built on AuthiChain infrastructure.</p>
+      <div data-id="437" class="relative z-10 max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="438" class="text-center mb-14 reveal">
+          <span data-id="439" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-blueLight mb-4">
+            <i data-id="440" data-lucide="map-pin" class="w-4 h-4"></i> Pilot Program
+          </span>
+          <h2 data-id="441" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Launching in Michigan. Scaling Nationwide.</h2>
+          <p data-id="442" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">The Great Lakes State leads the way in government document authentication innovation.</p>
+        </div>
+
+        <div data-id="443" class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <!-- Map -->
+          <div data-id="444" class="reveal flex justify-center">
+            <svg data-id="445" viewBox="0 0 960 600" class="w-full max-w-lg" aria-label="Map of United States with Michigan highlighted">
+              <!-- Simplified US outline with Michigan highlighted -->
+              <rect data-id="446" x="0" y="0" width="960" height="600" fill="transparent"/>
+              <!-- Western states -->
+              <rect data-id="447" x="60" y="100" width="80" height="120" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="448" x="60" y="230" width="80" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="449" x="150" y="80" width="70" height="160" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="450" x="150" y="250" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="451" x="230" y="100" width="80" height="120" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="452" x="230" y="230" width="80" height="80" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="453" x="230" y="320" width="80" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Central states -->
+              <rect data-id="454" x="320" y="80" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="455" x="320" y="190" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="456" x="320" y="300" width="70" height="90" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="457" x="400" y="80" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="458" x="400" y="190" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="459" x="400" y="300" width="70" height="90" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="460" x="480" y="100" width="70" height="90" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="461" x="480" y="200" width="70" height="90" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="462" x="480" y="300" width="70" height="100" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Great Lakes states -->
+              <rect data-id="463" x="560" y="80" width="70" height="80" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Michigan - highlighted -->
+              <rect data-id="464" x="560" y="80" width="75" height="90" rx="6" class="state-michigan"/>
+              <text data-id="465" x="597" y="130" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700" font-family="Inter">MI</text>
+              <rect data-id="466" x="560" y="180" width="70" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="467" x="560" y="260" width="70" height="80" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="468" x="560" y="350" width="70" height="80" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Eastern states -->
+              <rect data-id="469" x="640" y="80" width="60" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="470" x="640" y="150" width="60" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="471" x="640" y="230" width="60" height="80" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="472" x="640" y="320" width="60" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="473" x="710" y="80" width="60" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="474" x="710" y="150" width="60" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="475" x="710" y="220" width="60" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="476" x="710" y="290" width="60" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="477" x="780" y="100" width="55" height="50" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="478" x="780" y="160" width="55" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="479" x="780" y="230" width="55" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="480" x="780" y="300" width="55" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Southern states -->
+              <rect data-id="481" x="400" y="400" width="90" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="482" x="500" y="400" width="80" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="483" x="590" y="400" width="80" height="70" rx="4" class="state-default" opacity="0.8"/>
+              <rect data-id="484" x="680" y="400" width="70" height="60" rx="4" class="state-default" opacity="0.8"/>
+              <!-- Alaska & Hawaii -->
+              <rect data-id="485" x="80" y="420" width="100" height="70" rx="4" class="state-default" opacity="0.6"/>
+              <text data-id="486" x="130" y="460" text-anchor="middle" fill="#64748b" font-size="10" font-family="Inter">AK</text>
+              <rect data-id="487" x="200" y="450" width="50" height="30" rx="4" class="state-default" opacity="0.6"/>
+              <text data-id="488" x="225" y="470" text-anchor="middle" fill="#64748b" font-size="10" font-family="Inter">HI</text>
+              <!-- Glow around Michigan -->
+              <rect data-id="489" x="555" y="75" width="85" height="100" rx="10" fill="none" stroke="#2563eb" stroke-width="2" opacity="0.3">
+                <animate data-id="490" attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/>
+              </rect>
+            </svg>
+          </div>
+
+          <!-- Michigan Stats -->
+          <div data-id="491" class="reveal" style="transition-delay:0.15s">
+            <div data-id="492" class="space-y-5">
+              <div data-id="493" class="bg-base-800 border border-base-700 rounded-2xl p-6">
+                <div data-id="494" class="flex items-center gap-3 mb-4">
+                  <div data-id="495" class="w-10 h-10 rounded-xl bg-gov-blue/15 flex items-center justify-center">
+                    <i data-id="496" data-lucide="building" class="w-5 h-5 text-gov-blueLight"></i>
+                  </div>
+                  <div data-id="497">
+                    <div data-id="498" class="text-2xl font-bold text-gov-white tabular-nums"><span data-id="499" class="counter" data-target="247">0</span></div>
+                    <div data-id="500" class="text-xs text-gov-gray">Agencies Onboarded (Pilot)</div>
+                  </div>
+                </div>
+                <div data-id="501" class="flex items-center gap-3">
+                  <div data-id="502" class="w-10 h-10 rounded-xl bg-gov-blue/15 flex items-center justify-center">
+                    <i data-id="503" data-lucide="file-stack" class="w-5 h-5 text-gov-blueLight"></i>
+                  </div>
+                  <div data-id="504">
+                    <div data-id="505" class="text-2xl font-bold text-gov-white tabular-nums"><span data-id="506" class="counter" data-target="1.2" data-decimals="1">0</span>M</div>
+                    <div data-id="507" class="text-xs text-gov-gray">Documents in Pipeline</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phases -->
+              <div data-id="508" class="space-y-3">
+                <div data-id="509" class="flex items-center gap-4 bg-base-800 border border-green-500/30 rounded-xl p-4">
+                  <span data-id="510" class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center text-green-400 text-sm font-bold">1</span>
+                  <div data-id="511">
+                    <div data-id="512" class="text-sm font-semibold text-gov-white">Secretary of State</div>
+                    <div data-id="513" class="text-xs text-green-400">Active — Driver's Licenses</div>
+                  </div>
+                  <i data-id="514" data-lucide="check-circle" class="w-5 h-5 text-green-400 ml-auto"></i>
+                </div>
+                <div data-id="515" class="flex items-center gap-4 bg-base-800 border border-gov-blue/30 rounded-xl p-4">
+                  <span data-id="516" class="w-8 h-8 rounded-lg bg-gov-blue/15 flex items-center justify-center text-gov-blueLight text-sm font-bold">2</span>
+                  <div data-id="517">
+                    <div data-id="518" class="text-sm font-semibold text-gov-white">Vital Records</div>
+                    <div data-id="519" class="text-xs text-gov-blueLight">In Progress — Birth/Death Certificates</div>
+                  </div>
+                  <i data-id="520" data-lucide="loader" class="w-5 h-5 text-gov-blueLight ml-auto animate-spin" style="animation-duration:3s"></i>
+                </div>
+                <div data-id="521" class="flex items-center gap-4 bg-base-800 border border-base-700 rounded-xl p-4">
+                  <span data-id="522" class="w-8 h-8 rounded-lg bg-base-600/30 flex items-center justify-center text-gov-gray text-sm font-bold">3</span>
+                  <div data-id="523">
+                    <div data-id="524" class="text-sm font-semibold text-gov-white">Professional Licensing</div>
+                    <div data-id="525" class="text-xs text-gov-gray">Planned — Q3 2026</div>
+                  </div>
+                  <i data-id="526" data-lucide="clock" class="w-5 h-5 text-gov-gray ml-auto"></i>
+                </div>
+              </div>
+
+              <!-- Expansion -->
+              <div data-id="527" class="bg-base-800 border border-base-700 rounded-xl p-5">
+                <div data-id="528" class="text-xs text-gov-gray uppercase tracking-wider mb-3">Expansion Roadmap</div>
+                <div data-id="529" class="flex items-center gap-2 text-sm">
+                  <span data-id="530" class="text-gov-blueLight font-semibold">Michigan</span>
+                  <i data-id="531" data-lucide="arrow-right" class="w-4 h-4 text-gov-gray"></i>
+                  <span data-id="532" class="text-gov-grayLight">Great Lakes</span>
+                  <i data-id="533" data-lucide="arrow-right" class="w-4 h-4 text-gov-gray"></i>
+                  <span data-id="534" class="text-gov-gray">Nationwide</span>
+                </div>
+              </div>
+
+              <a data-id="535" href="#contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gov-blue text-white font-semibold text-sm glow-blue hover:scale-105 transition-all min-h-[44px]">
+                <i data-id="536" data-lucide="rocket" class="w-4 h-4"></i> Join the Pilot
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== $QRON TOKEN ===== -->
+    <section data-id="537" id="token" class="section-pad bg-base-800/40">
+      <div data-id="538" class="max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="539" class="text-center mb-14 reveal">
+          <span data-id="540" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-purple-400 mb-4">
+            <i data-id="541" data-lucide="coins" class="w-4 h-4"></i> Token Utility
+          </span>
+          <h2 data-id="542" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Powered by <span data-id="543" class="text-purple-400">$QRON</span> — The Utility Token of Trust</h2>
+          <p data-id="544" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">Seamless blockchain settlement for government verification fees, with zero crypto complexity for agencies.</p>
+        </div>
+
+        <div data-id="545" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+          <div data-id="546" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover">
+            <div data-id="547" class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center mb-4">
+              <i data-id="548" data-lucide="credit-card" class="w-6 h-6 text-green-400"></i>
+            </div>
+            <h3 data-id="549" class="font-bold text-gov-white mb-2 text-lg">Verification Fee Coverage</h3>
+            <p data-id="550" class="text-sm text-gov-gray leading-relaxed">Agencies pay in fiat (USD). The $QRON bridge handles all on-chain settlement automatically. No wallets, no crypto knowledge required.</p>
+          </div>
+          <div data-id="551" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.1s">
+            <div data-id="552" class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4">
+              <i data-id="553" data-lucide="layers" class="w-6 h-6 text-amber-400"></i>
+            </div>
+            <h3 data-id="554" class="font-bold text-gov-white mb-2 text-lg">Priority Processing</h3>
+            <p data-id="555" class="text-sm text-gov-gray leading-relaxed">Agencies can stake $QRON for guaranteed sub-second verification times and dedicated processing lanes during peak demand.</p>
+          </div>
+          <div data-id="556" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 card-hover" style="transition-delay:0.2s">
+            <div data-id="557" class="w-12 h-12 rounded-xl bg-gov-blue/10 flex items-center justify-center mb-4">
+              <i data-id="558" data-lucide="vote" class="w-6 h-6 text-gov-blueLight"></i>
+            </div>
+            <h3 data-id="559" class="font-bold text-gov-white mb-2 text-lg">Governance Voting</h3>
+            <p data-id="560" class="text-sm text-gov-gray leading-relaxed">$QRON holders participate in protocol upgrade governance. Agencies and stakeholders vote on feature priorities and security policies.</p>
+          </div>
+        </div>
+
+        <!-- Token Flow Diagram -->
+        <div data-id="561" class="reveal bg-base-800 border border-base-700 rounded-2xl p-6 md:p-8">
+          <div data-id="562" class="text-xs text-gov-gray uppercase tracking-wider mb-6 text-center">Token Utility Flow</div>
+          <div data-id="563" class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-2">
+            <div data-id="564" class="bg-base-900 border border-base-700 rounded-xl px-5 py-4 text-center min-w-[140px]">
+              <i data-id="565" data-lucide="building-2" class="w-6 h-6 text-gov-blueLight mx-auto mb-2"></i>
+              <div data-id="566" class="text-sm font-semibold text-gov-white">Agency</div>
+              <div data-id="567" class="text-xs text-gov-gray">Pays USD</div>
+            </div>
+            <i data-id="568" data-lucide="arrow-right" class="w-5 h-5 text-gov-gray rotate-90 md:rotate-0"></i>
+            <div data-id="569" class="bg-base-900 border border-gov-blue/30 rounded-xl px-5 py-4 text-center min-w-[140px]">
+              <i data-id="570" data-lucide="repeat" class="w-6 h-6 text-purple-400 mx-auto mb-2"></i>
+              <div data-id="571" class="text-sm font-semibold text-gov-white">$QRON Bridge</div>
+              <div data-id="572" class="text-xs text-gov-gray">Fiat → Token</div>
+            </div>
+            <i data-id="573" data-lucide="arrow-right" class="w-5 h-5 text-gov-gray rotate-90 md:rotate-0"></i>
+            <div data-id="574" class="bg-base-900 border border-purple-500/30 rounded-xl px-5 py-4 text-center min-w-[140px]">
+              <i data-id="575" data-lucide="link" class="w-6 h-6 text-gov-blueLight mx-auto mb-2"></i>
+              <div data-id="576" class="text-sm font-semibold text-gov-white">Polygon Chain</div>
+              <div data-id="577" class="text-xs text-gov-gray">Verification</div>
+            </div>
+            <i data-id="578" data-lucide="arrow-right" class="w-5 h-5 text-gov-gray rotate-90 md:rotate-0"></i>
+            <div data-id="579" class="bg-base-900 border border-green-500/30 rounded-xl px-5 py-4 text-center min-w-[140px]">
+              <i data-id="580" data-lucide="circle-check" class="w-6 h-6 text-green-400 mx-auto mb-2"></i>
+              <div data-id="581" class="text-sm font-semibold text-gov-white">Result</div>
+              <div data-id="582" class="text-xs text-gov-gray">Verified ✓</div>
+            </div>
+          </div>
+
+          <!-- Token Stats -->
+          <div data-id="583" class="mt-8 pt-6 border-t border-base-700 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div data-id="584">
+              <div data-id="585" class="text-xs text-gov-gray uppercase tracking-wider mb-1">Standard</div>
+              <div data-id="586" class="text-sm font-bold text-gov-white">ERC-20 on Polygon</div>
+            </div>
+            <div data-id="587">
+              <div data-id="588" class="text-xs text-gov-gray uppercase tracking-wider mb-1">Max Supply</div>
+              <div data-id="589" class="text-sm font-bold text-gov-white tabular-nums">1,000,000,000</div>
+            </div>
+            <div data-id="590">
+              <div data-id="591" class="text-xs text-gov-gray uppercase tracking-wider mb-1">Full Details</div>
+              <div data-id="592" class="text-sm font-bold text-purple-400">QRON.space</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRICING / ONBOARDING ===== -->
+    <section data-id="593" id="contact" class="section-pad bg-base-900 relative">
+      <div data-id="594" class="absolute inset-0 bg-gradient-to-b from-transparent via-gov-blue/3 to-transparent"></div>
+      <div data-id="595" class="relative z-10 max-w-6xl mx-auto px-4 md:px-6">
+        <div data-id="596" class="text-center mb-14 reveal">
+          <span data-id="597" class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gov-red mb-4">
+            <i data-id="598" data-lucide="rocket" class="w-4 h-4"></i> Get Started
+          </span>
+          <h2 data-id="599" class="text-3xl md:text-4xl lg:text-5xl font-bold text-gov-white mb-4">Ready to Secure Your Agency?</h2>
+          <p data-id="600" class="text-gov-gray max-w-2xl mx-auto text-base md:text-lg">Choose the plan that fits your agency's scale. All plans include blockchain verification, dashboard access, and dedicated support.</p>
+        </div>
+
+        <!-- Pricing Grid -->
+        <div data-id="601" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <!-- Municipal -->
+          <div data-id="602" class="reveal bg-base-800 border border-base-700 rounded-2xl p-7 card-hover flex flex-col">
+            <div data-id="603" class="mb-6">
+              <div data-id="604" class="text-xs text-gov-gray uppercase tracking-wider mb-2">Municipal</div>
+              <div data-id="605" class="flex items-end gap-1">
+                <span data-id="606" class="text-4xl font-black text-gov-white tabular-nums">$149</span>
+                <span data-id="607" class="text-sm text-gov-gray mb-1">/month</span>
+              </div>
+            </div>
+            <ul data-id="608" class="space-y-3 mb-8 flex-grow">
+              <li data-id="609" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="610" data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Up to 10,000 verifications/mo</li>
+              <li data-id="611" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="612" data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> 5 user accounts</li>
+              <li data-id="613" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="614" data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Email support</li>
+              <li data-id="615" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="616" data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> Standard dashboard</li>
+              <li data-id="617" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="618" data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0"></i> QronCode TruMark sealing</li>
+            </ul>
+            <button data-id="619" class="pricing-btn w-full py-3 rounded-xl border border-base-600 text-gov-white font-semibold text-sm hover:bg-base-700 transition-colors min-h-[44px]">Get Started</button>
+          </div>
+
+          <!-- State (Popular) -->
+          <div data-id="620" class="reveal bg-base-800 pricing-popular rounded-2xl p-7 card-hover flex flex-col relative" style="transition-delay:0.1s">
+            <div data-id="621" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gov-blue text-white text-xs font-bold px-4 py-1 rounded-full">Most Popular</div>
+            <div data-id="622" class="mb-6">
+              <div data-id="623" class="text-xs text-gov-blueLight uppercase tracking-wider mb-2">State</div>
+              <div data-id="624" class="flex items-end gap-1">
+                <span data-id="625" class="text-4xl font-black text-gov-white tabular-nums">$499</span>
+                <span data-id="626" class="text-sm text-gov-gray mb-1">/month</span>
+              </div>
+            </div>
+            <ul data-id="627" class="space-y-3 mb-8 flex-grow">
+              <li data-id="628" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="629" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> Up to 100,000 verifications/mo</li>
+              <li data-id="630" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="631" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> 25 user accounts</li>
+              <li data-id="632" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="633" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> Priority support</li>
+              <li data-id="634" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="635" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> Advanced dashboard + analytics</li>
+              <li data-id="636" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="637" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> Fraud detection alerts</li>
+              <li data-id="638" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="639" data-lucide="check" class="w-4 h-4 text-gov-blueLight flex-shrink-0"></i> API access</li>
+            </ul>
+            <button data-id="640" class="pricing-btn w-full py-3 rounded-xl bg-gov-blue text-white font-semibold text-sm glow-blue hover:bg-gov-blueDark transition-colors min-h-[44px]">Get Started</button>
+          </div>
+
+          <!-- Federal -->
+          <div data-id="641" class="reveal bg-base-800 border border-base-700 rounded-2xl p-7 card-hover flex flex-col" style="transition-delay:0.2s">
+            <div data-id="642" class="mb-6">
+              <div data-id="643" class="text-xs text-gov-red uppercase tracking-wider mb-2">Federal</div>
+              <div data-id="644" class="flex items-end gap-1">
+                <span data-id="645" class="text-4xl font-black text-gov-white tabular-nums">$1,499</span>
+                <span data-id="646" class="text-sm text-gov-gray mb-1">/month</span>
+              </div>
+            </div>
+            <ul data-id="647" class="space-y-3 mb-8 flex-grow">
+              <li data-id="648" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="649" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> Unlimited verifications</li>
+              <li data-id="650" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="651" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> Unlimited users</li>
+              <li data-id="652" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="653" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> Dedicated CSM</li>
+              <li data-id="654" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="655" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> Custom integration</li>
+              <li data-id="656" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="657" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> 99.99% SLA guarantee</li>
+              <li data-id="658" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="659" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> Air-gapped key management</li>
+              <li data-id="660" class="flex items-center gap-3 text-sm text-gov-grayLight"><i data-id="661" data-lucide="check" class="w-4 h-4 text-gov-redLight flex-shrink-0"></i> On-site deployment option</li>
+            </ul>
+            <button data-id="662" class="pricing-btn w-full py-3 rounded-xl border border-gov-red/50 text-gov-white font-semibold text-sm hover:bg-gov-red/10 transition-colors min-h-[44px]">Get Started</button>
+          </div>
+        </div>
+
+        <p data-id="663" class="text-center text-sm text-gov-gray mb-14">Need a custom enterprise solution? <span data-id="664" class="text-gov-blueLight cursor-pointer hover:text-gov-white transition-colors">Contact our team</span> for tailored deployment options.</p>
+
+        <!-- Contact Form -->
+        <div data-id="665" class="reveal max-w-2xl mx-auto bg-base-800 border border-base-700 rounded-2xl p-6 md:p-8">
+          <h3 data-id="666" class="text-xl font-bold text-gov-white mb-2 text-center">Agency Onboarding Request</h3>
+          <p data-id="667" class="text-sm text-gov-gray text-center mb-8">Complete the form below and our government partnerships team will reach out within 24 hours.</p>
+
+          <form data-id="668" id="contact-form-h8j4" class="space-y-5">
+            <div data-id="669" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div data-id="670">
+                <label data-id="671" for="agency-name" class="block text-sm font-medium text-gov-grayLight mb-1.5">Agency Name *</label>
+                <input data-id="672" type="text" id="agency-name" required class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base placeholder:text-base-500 focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors" placeholder="Michigan Secretary of State" />
+              </div>
+              <div data-id="673">
+                <label data-id="674" for="contact-name" class="block text-sm font-medium text-gov-grayLight mb-1.5">Contact Name *</label>
+                <input data-id="675" type="text" id="contact-name" required class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base placeholder:text-base-500 focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors" placeholder="Jane Smith" />
+              </div>
+            </div>
+            <div data-id="676" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div data-id="677">
+                <label data-id="678" for="email" class="block text-sm font-medium text-gov-grayLight mb-1.5">Email *</label>
+                <input data-id="679" type="email" id="email" required class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base placeholder:text-base-500 focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors" placeholder="jane@michigan.gov" />
+              </div>
+              <div data-id="680">
+                <label data-id="681" for="phone" class="block text-sm font-medium text-gov-grayLight mb-1.5">Phone</label>
+                <input data-id="682" type="tel" id="phone" class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base placeholder:text-base-500 focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors" placeholder="(517) 555-0100" />
+              </div>
+            </div>
+            <div data-id="683" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div data-id="684">
+                <label data-id="685" for="state-select" class="block text-sm font-medium text-gov-grayLight mb-1.5">State *</label>
+                <select data-id="686" id="state-select" required class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors appearance-none" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='1.5'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 1rem center;">
+                  <option data-id="687" value="">Select state</option>
+                  <option data-id="688" value="MI" selected>Michigan</option>
+                  <option data-id="689" value="OH">Ohio</option>
+                  <option data-id="690" value="IN">Indiana</option>
+                  <option data-id="691" value="IL">Illinois</option>
+                  <option data-id="692" value="WI">Wisconsin</option>
+                  <option data-id="693" value="MN">Minnesota</option>
+                  <option data-id="694" value="PA">Pennsylvania</option>
+                  <option data-id="695" value="NY">New York</option>
+                  <option data-id="696" value="CA">California</option>
+                  <option data-id="697" value="TX">Texas</option>
+                  <option data-id="698" value="FL">Florida</option>
+                  <option data-id="699" value="other">Other</option>
+                </select>
+              </div>
+              <div data-id="700">
+                <label data-id="701" for="agency-type" class="block text-sm font-medium text-gov-grayLight mb-1.5">Agency Type *</label>
+                <select data-id="702" id="agency-type" required class="w-full h-12 px-4 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors appearance-none" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='1.5'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 1rem center;">
+                  <option data-id="703" value="">Select type</option>
+                  <option data-id="704" value="secretary-of-state">Secretary of State</option>
+                  <option data-id="705" value="vital-records">Vital Records</option>
+                  <option data-id="706" value="licensing">Professional Licensing</option>
+                  <option data-id="707" value="courts">Court System</option>
+                  <option data-id="708" value="county-clerk">County Clerk</option>
+                  <option data-id="709" value="election">Election Administration</option>
+                  <option data-id="710" value="law-enforcement">Law Enforcement</option>
+                  <option data-id="711" value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div data-id="712">
+              <label data-id="713" for="message" class="block text-sm font-medium text-gov-grayLight mb-1.5">Message</label>
+              <textarea data-id="714" id="message" rows="4" class="w-full px-4 py-3 bg-base-900 border border-base-700 rounded-xl text-gov-white text-base placeholder:text-base-500 focus:outline-none focus:ring-2 focus:ring-gov-blue/50 focus:border-gov-blue transition-colors resize-none" placeholder="Tell us about your authentication needs..."></textarea>
+            </div>
+            <button data-id="715" type="submit" id="submit-btn-c9d3" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gov-red to-gov-blue text-white font-bold text-base glow-red hover:scale-[1.02] transition-all min-h-[48px] flex items-center justify-center gap-2">
+              <i data-id="716" data-lucide="send" class="w-5 h-5"></i> Submit Onboarding Request
+            </button>
+          </form>
+
+          <div data-id="717" id="form-success-y2w7" class="hidden text-center py-8">
+            <div data-id="718" class="w-16 h-16 rounded-full bg-green-500/15 flex items-center justify-center mx-auto mb-4">
+              <i data-id="719" data-lucide="check-circle" class="w-8 h-8 text-green-400"></i>
+            </div>
+            <h4 data-id="720" class="text-xl font-bold text-gov-white mb-2">Request Submitted!</h4>
+            <p data-id="721" class="text-sm text-gov-gray">Our government partnerships team will contact you within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer data-id="722" id="footer-b6n5" class="bg-base-800/60 border-t border-base-700">
+    <div data-id="723" class="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16">
+      <div data-id="724" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <!-- Brand -->
+        <div data-id="725" class="lg:col-span-1">
+          <div data-id="726" class="flex items-center gap-2 mb-4">
+            <svg data-id="727" class="w-7 h-7" viewBox="0 0 32 32" fill="none">
+              <path data-id="728" d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16 6.88-1.05 12-8.27 12-16V8L16 2z" fill="url(#footer-shield)" opacity="0.15"/>
+              <path data-id="729" d="M16 2L4 8v8c0 7.73 5.12 14.95 12 16 6.88-1.05 12-8.27 12-16V8L16 2z" stroke="url(#footer-shield)" stroke-width="1.5" fill="none"/>
+              <path data-id="730" d="M12 16l3 3 5-6" stroke="#f1f5f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs data-id="731"><linearGradient data-id="732" id="footer-shield" x1="4" y1="2" x2="28" y2="26"><stop data-id="733" stop-color="#dc2626"/><stop data-id="734" offset="1" stop-color="#2563eb"/></linearGradient></defs>
+            </svg>
+            <span data-id="735" class="text-lg font-bold text-gov-white">GovChain<span data-id="736" class="text-gov-blueLight">.us</span></span>
+          </div>
+          <p data-id="737" class="text-sm text-gov-gray leading-relaxed mb-3">A product of the AuthiChain Protocol. Securing government documents with blockchain technology.</p>
+          <p data-id="738" class="text-xs text-base-500">Made by Copilot</p>
+        </div>
+
+        <!-- Ecosystem -->
+        <div data-id="739">
+          <h4 data-id="740" class="text-sm font-semibold text-gov-white mb-4 uppercase tracking-wider">Ecosystem</h4>
+          <ul data-id="741" class="space-y-3">
+            <li data-id="742"><span data-id="743" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">AuthiChain.com</span></li>
+            <li data-id="744"><span data-id="745" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">StrainChain.io</span></li>
+            <li data-id="746"><span data-id="747" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">QRON.space</span></li>
+            <li data-id="748"><span data-id="749" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">QronCode.com</span></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div data-id="750">
+          <h4 data-id="751" class="text-sm font-semibold text-gov-white mb-4 uppercase tracking-wider">Legal</h4>
+          <ul data-id="752" class="space-y-3">
+            <li data-id="753"><span data-id="754" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">Privacy Policy</span></li>
+            <li data-id="755"><span data-id="756" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">Terms of Service</span></li>
+            <li data-id="757"><span data-id="758" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">Accessibility</span></li>
+            <li data-id="759"><span data-id="760" class="text-sm text-gov-gray hover:text-gov-white transition-colors cursor-pointer">FOIA Compliance</span></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div data-id="761">
+          <h4 data-id="762" class="text-sm font-semibold text-gov-white mb-4 uppercase tracking-wider">Contact</h4>
+          <ul data-id="763" class="space-y-3">
+            <li data-id="764" class="flex items-center gap-2 text-sm text-gov-gray"><i data-id="765" data-lucide="mail" class="w-4 h-4"></i> partnerships@govchain.us</li>
+            <li data-id="766" class="flex items-center gap-2 text-sm text-gov-gray"><i data-id="767" data-lucide="phone" class="w-4 h-4"></i> (888) GOV-CHAIN</li>
+            <li data-id="768" class="flex items-center gap-2 text-sm text-gov-gray"><i data-id="769" data-lucide="map-pin" class="w-4 h-4"></i> Washington, D.C.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Compliance bar -->
+      <div data-id="770" class="border-t border-base-700 pt-8">
+        <p data-id="771" class="text-xs text-base-500 leading-relaxed mb-4">
+          GovChain.us operates under AuthiChain Protocol governance. All document verifications are recorded on the Polygon blockchain. Verification records are permanent and immutable.
+        </p>
+        <div data-id="772" class="bg-gov-red/5 border border-gov-red/15 rounded-lg px-4 py-3 mb-6">
+          <p data-id="773" class="text-xs text-gov-gray leading-relaxed">
+            <strong data-id="774" class="text-gov-redLight">Disclaimer:</strong> GovChain is not a government agency. GovChain provides technology services to government entities. Use of GovChain services does not constitute official government endorsement. All government agency partnerships are subject to applicable procurement regulations.
+          </p>
+        </div>
+        <div data-id="775" class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p data-id="776" class="text-xs text-base-500">&copy; 2026 AuthiChain Protocol. All rights reserved.</p>
+          <div data-id="777" class="flex items-center gap-6">
+            <span data-id="778" class="text-xs text-base-500 flex items-center gap-1.5"><i data-id="779" data-lucide="link" class="w-3 h-3"></i> Polygon Network</span>
+            <span data-id="780" class="text-xs text-base-500 flex items-center gap-1.5"><i data-id="781" data-lucide="shield-check" class="w-3 h-3"></i> SOC 2 Certified</span>
+            <span data-id="782" class="text-xs text-base-500 flex items-center gap-1.5"><i data-id="783" data-lucide="lock" class="w-3 h-3"></i> AES-256</span>
+          </div>
+        </div>
+      </div>
     </div>
   </footer>
 
   <script>
-    (function(){
-      const t = document.querySelector('[data-theme-toggle]');
-      const r = document.documentElement;
-      let d = r.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-      r.setAttribute('data-theme', d);
-      function updateIcon() {
-        if (!t) return;
-        t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
-        t.innerHTML = d === 'dark'
-          ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-          : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      }
-      updateIcon();
-      t && t.addEventListener('click', () => { d = d === 'dark' ? 'light' : 'dark'; r.setAttribute('data-theme', d); updateIcon(); });
-    })();
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; observer.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.use-case-card, .step-item, .stat-item, .compliance-badge').forEach(el => {
-      el.style.opacity = '0'; el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      observer.observe(el);
+    // Initialize Lucide
+    lucide.createIcons();
+
+    // ===== MOBILE MENU =====
+    const mobileBtn = document.getElementById('mobile-menu-btn-r4z1');
+    const mobileMenu = document.getElementById('mobile-menu-w8k2');
+    const mobileClose = document.getElementById('mobile-menu-close-t5n3');
+
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      document.body.classList.add('mobile-menu-open');
     });
+
+    mobileClose.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      document.body.classList.remove('mobile-menu-open');
+    });
+
+    // Close on link click
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        document.body.classList.remove('mobile-menu-open');
+      });
+    });
+
+    // ===== SCROLL REVEAL =====
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ===== ANIMATED COUNTERS =====
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          if (el.dataset.counted) return;
+          el.dataset.counted = 'true';
+          const target = parseFloat(el.dataset.target);
+          const decimals = parseInt(el.dataset.decimals || '0');
+          const duration = 2000;
+          const startTime = performance.now();
+
+          function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = target * eased;
+            el.textContent = current.toFixed(decimals);
+            if (progress < 1) requestAnimationFrame(update);
+            else el.textContent = target.toFixed(decimals);
+          }
+          requestAnimationFrame(update);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+    // ===== STEP CARD TOGGLES =====
+    document.querySelectorAll('.step-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.step-card');
+        const details = card.querySelector('.step-details');
+        const toggleText = btn.querySelector('.toggle-text');
+        const toggleIcon = btn.querySelector('.toggle-icon');
+        const isHidden = details.classList.contains('hidden');
+        details.classList.toggle('hidden');
+        toggleText.textContent = isHidden ? 'Show less' : 'Learn more';
+        toggleIcon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0)';
+      });
+    });
+
+    // ===== PARTICLES =====
+    const particlesContainer = document.getElementById('particles-container-a1b2');
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 4 + 1;
+      const x = Math.random() * 100;
+      const duration = Math.random() * 15 + 10;
+      const colors = ['#dc2626', '#2563eb', '#3b82f6', '#ef4444', '#f1f5f9'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      particle.style.cssText = `
+        width:${size}px; height:${size}px; left:${x}%; bottom:-10px;
+        background:${color}; opacity:0.3; animation-duration:${duration}s;
+      `;
+      particlesContainer.appendChild(particle);
+      setTimeout(() => particle.remove(), duration * 1000);
+    }
+    // Create initial batch
+    for (let i = 0; i < 15; i++) {
+      setTimeout(createParticle, Math.random() * 3000);
+    }
+    setInterval(createParticle, 1500);
+
+    // ===== NAV SCROLL EFFECT =====
+    const navHeader = document.getElementById('nav-header-k3x9');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 100) {
+        navHeader.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
+      } else {
+        navHeader.style.boxShadow = 'none';
+      }
+      lastScroll = scrollY;
+    });
+
+    // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ===== FORM SUBMISSION =====
+    const form = document.getElementById('contact-form-h8j4');
+    const formSuccess = document.getElementById('form-success-y2w7');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Validate
+      const agencyName = document.getElementById('agency-name').value.trim();
+      const contactName = document.getElementById('contact-name').value.trim();
+      const emailVal = document.getElementById('email').value.trim();
+
+      if (!agencyName || !contactName || !emailVal) return;
+
+      // Simulate submission
+      const submitBtn = document.getElementById('submit-btn-c9d3');
+      submitBtn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Submitting...';
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        form.classList.add('hidden');
+        formSuccess.classList.remove('hidden');
+        lucide.createIcons();
+      }, 1500);
+    });
+
+    // ===== PRICING BUTTONS =====
+    document.querySelectorAll('.pricing-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const contactSection = document.getElementById('contact');
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+        // Focus on agency name after scroll
+        setTimeout(() => document.getElementById('agency-name').focus(), 800);
+      });
+    });
+
+    // ===== ACTIVE NAV HIGHLIGHT =====
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('#desktop-nav-p2m7 a');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === id) {
+              link.classList.add('text-gov-white');
+              link.classList.remove('text-gov-gray');
+            } else {
+              link.classList.remove('text-gov-white');
+              link.classList.add('text-gov-gray');
+            }
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(section => sectionObserver.observe(section));
   </script>
 </body>
 </html>
