@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://govchain.us/sitemap.xml
+
+# GovChain - Government Authentication Protocol
+# https://govchain.us
