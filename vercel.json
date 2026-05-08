@@ -6,6 +6,8 @@
     { "source": "/api/document", "destination": "/api/document.js" },
     { "source": "/api/grants", "destination": "/api/grants.js" },
     { "source": "/api/status", "destination": "/api/status.js" },
+    { "source": "/api/checkout", "destination": "/api/checkout.js" },
+    { "source": "/api/webhook", "destination": "/api/webhook.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
