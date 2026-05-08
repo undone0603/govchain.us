@@ -5,6 +5,7 @@
     { "source": "/api/contact", "destination": "/api/contact.js" },
     { "source": "/api/document", "destination": "/api/document.js" },
     { "source": "/api/grants", "destination": "/api/grants.js" },
+    { "source": "/api/status", "destination": "/api/status.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
