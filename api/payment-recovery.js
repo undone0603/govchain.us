@@ -1,10 +1,35 @@
-// /api/payment-recovery - Cron dunning handler for GovChain subscription recovery
+// /api/payment-recovery - Cron dunning + Resend email for GovChain
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+async function sendDunningEmail(to, name, plan, attempt) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'GovChain Billing <billing@govchain.us>',
+      to,
+      subject: 'Action required: Update your GovChain payment method',
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+          <h2>Payment failed on your ${plan} plan</h2>
+          <p>Hi ${name || 'there'},</p>
+          <p>We couldn't process your GovChain payment (attempt ${attempt} of 3). Keep your government contracting pipeline, grant tracking, and SAM.gov integrations active by updating your billing info.</p>
+          <a href="https://govchain.us/billing" style="background:#1d4ed8;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:16px">Update Payment Method</a>
+          <p style="margin-top:24px;color:#666;font-size:14px">Need assistance? Reply to this email and our team will help immediately.</p>
+        </div>
+      `,
+    }),
+  });
+  return res.ok;
+}
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -29,25 +54,33 @@ module.exports = async (req, res) => {
     const results = [];
 
     for (const sub of failedSubs || []) {
+      const { data: user } = await supabase
+        .from('users')
+        .select('email, full_name')
+        .eq('id', sub.user_id)
+        .single();
+
+      const retryAttempt = (sub.retry_count || 0) + 1;
+      let emailSent = false;
+      if (user?.email) {
+        emailSent = await sendDunningEmail(user.email, user.full_name, sub.plan, retryAttempt);
+      }
+
       await supabase.from('payment_recovery_log').insert({
         subscription_id: sub.id,
         user_id: sub.user_id,
-        attempt_number: (sub.retry_count || 0) + 1,
+        attempt_number: retryAttempt,
         attempted_at: new Date().toISOString(),
         status: 'queued',
+        email_sent: emailSent,
       });
 
       await supabase
         .from('subscriptions')
-        .update({ retry_count: (sub.retry_count || 0) + 1 })
+        .update({ retry_count: retryAttempt })
         .eq('id', sub.id);
 
-      results.push({
-        subscriptionId: sub.id,
-        userId: sub.user_id,
-        plan: sub.plan,
-        retryAttempt: (sub.retry_count || 0) + 1,
-      });
+      results.push({ subscriptionId: sub.id, userId: sub.user_id, plan: sub.plan, retryAttempt, emailSent });
     }
 
     return res.status(200).json({ success: true, processed: results.length, results });
