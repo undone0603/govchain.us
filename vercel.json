@@ -9,6 +9,7 @@
     { "source": "/api/checkout", "destination": "/api/checkout.js" },
     { "source": "/api/webhook", "destination": "/api/webhook.js" },
             { "source": "/api/analytics", "destination": "/api/analytics.js" },
+        { "source": "/api/contract", "destination": "/api/contract.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
