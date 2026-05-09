@@ -22,6 +22,9 @@
         { "source": "/api/subscription", "destination": "/api/subscription.js" },
             { "source": "/api/user", "destination": "/api/user.js" },
         { "source": "/api/search", "destination": "/api/search.js" },
+        { "source": "/api/compliance", "destination": "/api/compliance.js" },
+    { "source": "/api/milestone", "destination": "/api/milestone.js" },
+    { "source": "/api/budget", "destination": "/api/budget.js" },
     { "source": "/api/(.*)", "destination": "/api/$1.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
