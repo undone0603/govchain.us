@@ -1,4 +1,5 @@
 // Vercel Serverless Function: POST /api/agency
+// v2: GET + POST support
 // GovChain agency onboarding - stores lead in Supabase + sends notification
 
 export default async function handler(req, res) {
